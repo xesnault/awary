@@ -1,0 +1,22 @@
+version: '3'
+services:
+  api:
+    image: node:18.13
+    network_mode: "host"
+    user: ${USER_ID}:${GROUP_ID}
+    volumes:
+      - .:/api
+    working_dir: /api
+    command: bash -c "${CUSTOM_COMMAND:-echo 'No command provided'}"
+    depends_on:
+      - "db"
+  db:
+    image: mongo:5.0
+    user: ${USER_ID}:${GROUP_ID}
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 127.0.0.1:27017:${DB_PORT:-27017}
+    volumes:
+      - ./db:/data/db

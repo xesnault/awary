@@ -1,0 +1,159 @@
+import {CogIcon, PlusIcon, TrashIcon} from "@heroicons/react/outline";
+import {useCallback, useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {useApi} from "../api";
+import Button from "../components/Button";
+import {LogCard} from "../components/LogCard";
+import {ProjectSideBar} from "../components/ProjectSideBar";
+import {Log} from "../core/Log";
+import {Metric, MetricDataOnUpdate} from "../core/Metric";
+import {Project} from "../core/Project";
+import {MetricForm} from "../forms/createMetricForm";
+import {useModal} from "../services/ModalService";
+import {formatTimestamp} from "../utils/formatTimestamp";
+import {AddSerieValueForm} from "./projectPage/forms/AddSeriesValueForm";
+
+export type MetricCardProps = {
+	metric: Metric
+	onDelete: () => void
+	onAddDataPoint: () => void
+}
+
+//const dayDuration = 1000 * 60 * 60 * 24 // Duration of a day in milliseconds
+const dayDuration = 1000 * 60 * 60 * 24// Duration of a day in milliseconds
+
+function last30Days(data: {value: number | null, date: number}[]) {
+	data.sort((a, b) => b.date - a.date)
+	const processedData: {date: string, value: number | null}[] = []
+	const startingPoint = Date.now()
+
+	for (let currentDay = 0; currentDay < 60; ++currentDay) {
+		const beforeThreshold = startingPoint - (currentDay * dayDuration)
+		const last = data.find(x => x.date < beforeThreshold)
+		processedData.push({
+			date: formatTimestamp(beforeThreshold),
+			value: last && last.value !== null ? last.value : null
+		})
+	}
+
+	return processedData
+}
+
+export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) {
+	const modalService = useModal();
+	const api = useApi()
+
+	const data = metric.history ? last30Days(metric.history).reverse() : []
+
+	const addDataPoint = async (value: number) => {
+		await api.addValueToSerie(metric.projectId, metric.id, value)
+		onAddDataPoint()
+	}
+
+	const updateMetric = async (data: MetricDataOnUpdate) => {
+		await api.updateMetric(metric.projectId, metric.id, data)
+		onDelete() // I'm lazy
+	}
+
+	const deleteMetric = async () => {
+		await api.deleteMetric(metric.projectId, metric.id);
+		onDelete()
+	}
+
+	const metricForm = (close: () => void) =>
+		<MetricForm
+			metric={metric}
+			close={close}
+			onCreate={updateMetric}
+		/>
+
+	return (
+		<div className="card f-r">
+			<div className="flex-1 f-c">
+				<div className="f-r">
+					<div className="flex-1"></div>
+					<p className="flex-1 text-center text-xl font-bold">{metric.name}</p>
+					<div className="flex-1 f-r gap-2 justify-end items-center">
+						<PlusIcon
+							className="w-4 h-4 text-green-300 hover:bg-neutral-500 cursor-pointer duration-75"
+							onClick={() => modalService.addModal((close) => 
+								<AddSerieValueForm series={metric} close={close} onCreate={addDataPoint} />
+							)}
+						/>
+						<CogIcon
+							className="w-4 h-4 text-neutral-300 hover:bg-neutral-500 cursor-pointer duration-75"
+							onClick={() => modalService.addModal(metricForm)}
+						/>
+						<TrashIcon
+							className="w-4 h-4 text-red-300 hover:bg-neutral-500 cursor-pointer duration-75 mr-2"
+							onClick={() => modalService.confirmation(`Delete the metric "${metric.name}" ?`, deleteMetric)}
+						/>
+					</div>
+				</div>
+				<div className="f-c text-left p-2">
+					<span>Id: {metric.id}</span>
+					<span>Last update: {formatTimestamp(metric.history?.at(0)?.date || 0)}</span>
+					<span>Last value: {metric.history?.at(0)?.value}</span>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+export function ProjectMetricsPage() {
+	
+	const api = useApi();
+	const modalService = useModal();
+	const navigate = useNavigate()
+	const {projectId} = useParams();
+	const [errorMessage, setErrorMessage] = useState<null | string>(null);
+	const [project, setProject] = useState<Project | null>(null);
+	const [metrics, setMetrics] = useState<Metric[]>([]);
+
+	const fetchProject = useCallback(async () => {
+		const project = await api.fetchProject(projectId as string);
+		setProject(project);
+		const metrics = await api.fetchProjectMetrics(projectId as string);
+		setMetrics(metrics);
+	}, [projectId, api])
+
+	useEffect(() => {fetchProject()}, [fetchProject])
+
+	const onSomethingChanged = () => {
+		fetchProject();
+	}
+
+	if (!project) {
+		return <div>Loading project...</div>
+	}
+
+	const metricForm = (close: () => void) =>
+		<MetricForm
+			close={close}
+			onCreate={async (data) => {
+				close()
+				await api.createSeries(project.id, data)
+				onSomethingChanged()
+			}}
+		/> 
+
+	return (
+		<div className="flex-1 f-c gap-4 overflow-scroll">
+			<div className="f-r justify-between items-center border-b border-neutral-600">
+				<h2 className="text-left text-3xl font-bold pb-4">Metrics</h2>
+				<Button text="Create new metric" onClick={() => modalService.addModal(metricForm)}/>
+			</div>
+			<div className={`grid grid-cols-2 rounded-md gap-2 overflow-scroll pr-2`}>
+				{metrics.map(metric => 
+					<MetricCard
+						key={metric.id}
+						metric={metric}
+						onDelete={onSomethingChanged}
+						onAddDataPoint={onSomethingChanged}
+					/>
+				)}
+			</div>
+		</div>
+	)
+}

@@ -1,0 +1,11 @@
+server/node_modules
+server/dist
+server/db
+server/conf.env
+
+web-app/node_modules
+web-app/build
+
+user-docs/site
+
+.nvimrc
