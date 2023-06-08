@@ -1,6 +1,6 @@
-import {CogIcon, PlusIcon, TrashIcon} from "@heroicons/react/outline";
+import {CogIcon, DocumentIcon, DocumentReportIcon, DocumentSearchIcon, PlusIcon, TrashIcon, ViewListIcon} from "@heroicons/react/outline";
 import {useCallback, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {useApi} from "../api";
 import Button from "../components/Button";
@@ -85,6 +85,11 @@ export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) 
 							className="w-4 h-4 text-neutral-300 hover:bg-neutral-500 cursor-pointer duration-75"
 							onClick={() => modalService.addModal(metricForm)}
 						/>
+						<Link to={`${metric.id}/history`}>
+							<DocumentSearchIcon
+								className="w-4 h-4 text-neutral-300 hover:bg-neutral-500 cursor-pointer duration-75"
+							/>
+						</Link>
 						<TrashIcon
 							className="w-4 h-4 text-red-300 hover:bg-neutral-500 cursor-pointer duration-75 mr-2"
 							onClick={() => modalService.confirmation(`Delete the metric "${metric.name}" ?`, deleteMetric)}

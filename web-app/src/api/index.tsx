@@ -203,6 +203,11 @@ export class Api extends React.Component<MyProps, MyState> {
 		return metricsData.map(data => new Metric(data));
 	}
 
+	public async fetchProjectMetric(projectId: string, metricId: string): Promise<Metric> {
+		const data = await this._Get(`/projects/${projectId}/metrics/${metricId}`) as MetricData;
+		return new Metric(data);
+	}
+
 	async createSeries(projectId: string, data: MetricDataOnUpdate): Promise<void> {
 		await this._Post(`/projects/${projectId}/metrics`, data)
 	}
@@ -217,6 +222,10 @@ export class Api extends React.Component<MyProps, MyState> {
 
 	async deleteMetric(projectId: string, metricId: string): Promise<void> {
 		await this._Delete(`/projects/${projectId}/metrics/${metricId}`)
+	}
+	
+	async deleteMetricHistory(projectId: string, metricId: string, recordId: string): Promise<void> {
+		await this._Delete(`/projects/${projectId}/metrics/${metricId}/history/${recordId}`)
 	}
 
 	async createView(projectId: string, data: ViewDataOnCreation<any>): Promise<void> {

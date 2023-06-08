@@ -15,6 +15,7 @@ export interface MetricData {
 	name: string
 	color: string
 	history: {
+		id: string
 		seriesId: string
 		date: number
 		value: number
