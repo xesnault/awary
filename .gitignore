@@ -6,6 +6,6 @@ server/conf.env
 web-app/node_modules
 web-app/build
 
-user-docs/site
+docs/site
 
 .nvimrc

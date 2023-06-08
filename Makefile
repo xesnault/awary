@@ -1,4 +1,4 @@
-.PHONY: db server-dev server-prod web-app-dev test user-docs
+.PHONY: db server-dev server-prod server-setup web-app-dev web-app-build web-app-setup test docs
 
 UIDS:= USER_ID=$(shell id -u) GROUP_ID=$(shell id -g)
 ENV_VARS:= set -a && . ./conf.env && ${UIDS} && set +a
@@ -10,6 +10,9 @@ db:
 
 # Server
 
+server-setup:
+	cd server && npm install
+
 server-dev:
 	cd server && npm run dev
 
@@ -18,15 +21,19 @@ server-prod:
 
 test:
 	cd server && npm run test
-	 
-
 
 # Web app
+
+web-app-setup:
+	cd web-app && npm install
 
 web-app-dev:
 	cd web-app && npm start
 
+web-app-build:
+	cd web-app && npm run build
+
 # User documentation
 
-user-docs:
-	cd user-docs && python -m mkdocs build
+docs:
+	cd docs && python -m mkdocs build
