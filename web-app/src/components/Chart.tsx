@@ -80,13 +80,13 @@ export default function Chart({charts}: ChartProps) {
 				<ComposedChart data={d}>
 				{d.map((lineData, index) => {
 					if (charts[index]?.type === "line")
-						return <Line type="monotone" dataKey={`values[${index}]`} name={charts[index]?.name} stroke={charts[index].color} />
+						return <Line type="monotone" dataKey={`values[${index}]`} dot={false} name={charts[index]?.name} stroke={charts[index].color} />
 					if (charts[index]?.type === "bar")
 						return <Bar fill={charts[index]?.color} dataKey={`values[${index}]`} name={charts[index]?.name} stroke={charts[index].color} />
 				})}
 					<XAxis dataKey="date" stroke="#AAAAAA"/>
 					<YAxis stroke="#AAAAAA"/>
-					<Tooltip/>
+					<Tooltip contentStyle={{backgroundColor: "#444444"}}/>
 				</ComposedChart>
 			</ResponsiveContainer>
 		</>
