@@ -98,6 +98,7 @@ export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) 
 				</div>
 				<div className="f-c text-left p-2">
 					<span>Id: {metric.id}</span>
+					<span>Project id: {metric.projectId}</span>
 					<span>Last update: {formatTimestamp(metric.history?.at(0)?.date || 0)}</span>
 					<span>Last value: {metric.history?.at(0)?.value}</span>
 				</div>
@@ -145,8 +146,8 @@ export function ProjectMetricsPage() {
 
 	return (
 		<div className="flex-1 f-c gap-4 overflow-scroll">
-			<div className="f-r justify-between items-center border-b border-neutral-600">
-				<h2 className="text-left text-3xl font-bold pb-4">Metrics</h2>
+			<div className="f-r justify-between items-center border-b border-neutral-600 pb-4">
+				<h2 className="text-left text-3xl font-bold">Metrics</h2>
 				<Button text="Create new metric" onClick={() => modalService.addModal(metricForm)}/>
 			</div>
 			<div className={`grid grid-cols-2 rounded-md gap-2 overflow-scroll pr-2`}>

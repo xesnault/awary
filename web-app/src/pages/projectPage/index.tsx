@@ -55,12 +55,13 @@ export default function ProjectPage() {
 
 	const onSaveDashboard = async (dashboard: DashboardView) => {
 		if (!dashboardConfig) {
-			return api.createView(project.id, {
+			await api.createView(project.id, {
 				provider: "Web",
 				type: "dashboard",
 				name: "dashboard",
 				config: dashboard
 			})
+			return fetchProject();
 		}
 		await api.updateView(project.id, dashboardConfig, {name: "dashboard", config: dashboard});
 		fetchProject();

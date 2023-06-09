@@ -55,11 +55,11 @@ export function ProjectSideBar({project}: ProjectSideBarProps) {
 					</Link>)
 				)}
 			</div>
-			<div className="flex-1 flex flex-col items-center justify-end">
-				<a href={process.env.REACT_APP_DOCS_URL} className="f-r items-center gap-4 p-4 hover:bg-neutral-600 rounded-md duration-200">
-						<BookOpenIcon className="w-8 h-8"/>
-						<div className="text-xl">Docs</div>
-					</a>
+			<div className="flex-1 f-c gap-4 items-center justify-end">
+				<a href={process.env.REACT_APP_DOCS_URL} target="_blank" className="f-r items-center gap-4 p-4 hover:bg-neutral-600 rounded-md duration-200">
+					<BookOpenIcon className="w-8 h-8"/>
+					<div className="text-xl">Docs</div>
+				</a>
 				{
 					api.GetUserData() ? 
 						<>

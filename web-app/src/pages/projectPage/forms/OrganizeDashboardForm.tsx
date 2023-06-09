@@ -56,8 +56,8 @@ export function OrganizeDashboardForm(props: OrganizeDashboardFormProps) {
 				metricId: metric.id,
 				name: metric.name,
 				order: index,
-				show: true,
-				color: "white"
+				show: false,
+				color: "#dddddd"
 			})),
 			charts: []
 		}
@@ -120,7 +120,6 @@ export function OrganizeDashboardForm(props: OrganizeDashboardFormProps) {
 						/>
 					</div>
 					<div className={`${optionsCss} px-1`}>
-						Show
 						<input type="checkbox" checked={metric.show}
 							onChange={(valueString) => {
 								const checked = valueString.target.checked
