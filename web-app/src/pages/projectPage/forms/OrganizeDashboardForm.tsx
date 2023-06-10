@@ -75,14 +75,14 @@ export function OrganizeDashboardForm(props: OrganizeDashboardFormProps) {
 			<div className="f-r justify-around border-b border-neutral-400 pb-2">
 				<Button
 					text="Top row"
-					color={showGraphs ? "dark" : "light"}
+					color={!showGraphs ? "dark" : "brighter-dark"}
 					onClick={() => {
 						setShowGraphs(false)
 					}}
 				/>
 				<Button
 					text="Graphs"
-					color={!showGraphs ? "dark" : "light"}
+					color={showGraphs ? "dark" : "brighter-dark"}
 					onClick={() => {
 						setShowGraphs(true)
 					}}
@@ -209,7 +209,7 @@ function OrganizeCharts({metrics, charts, onChange, close}: OrganizeDashboardCha
 
 	return (
 		<div className="f-c gap-2">
-			<PlusIcon className="w-4 h-4 text-green-300 ml-auto cursor-pointer" onClick={addChart}/>
+			<Button text="Add chart" className="mx-auto cursor-pointer" onClick={addChart}/>
 			{(charts || []).map((chart, chartIndex) => (
 				<div key={chartIndex} className="f-c border border-neutral-500 p-2 rounded-md gap-2 mb-2">
 					<div className="f-r items-center gap-2">
