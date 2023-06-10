@@ -19,9 +19,9 @@ export function projectsRoutes(app: App) {
 				const {name} = request.body;
 				const {caller} = request.data;
 
-				await projectService.createProject(caller.asUser(), name);
+				const project = await projectService.createProject(caller.asUser(), name);
 
-				reply.status(201).send({success: true});
+				reply.status(201).send({id: project.id});
 			}
 		);
 

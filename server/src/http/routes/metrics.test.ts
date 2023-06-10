@@ -17,7 +17,7 @@ describe("Metrics", function () {
 
 	let metric1: any
 
-	before(async function () {
+	beforeEach(async function () {
 		// Setup the server and app
 		await deleteDatabase();
 		server = await buildTestServer();
@@ -75,46 +75,46 @@ describe("Metrics", function () {
 		project2ApiKey1 = new TestApiKey(server.server, response.body[0].key)
 	});
 
-	it ("Returns empty metric list", async function() {
-		const response = await users[0].Get(`/projects/${project1.id}/metrics`);
+	it ("Return empty metric list", async function() {
+		const resGet = await users[0].Get(`/projects/${project1.id}/metrics`);
 
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(0);
+		expect(resGet.statusCode).to.equals(200);
+		expect(resGet.body).to.be.a("array");
+		expect(resGet.body).to.have.length(0);
 	});
 
-	it ("Returns error 400 on bad payload", async function() {
-		let response = await users[0].Post(`/projects/${project1.id}/metrics`, {
-		});
+	it ("Return error 400 on bad payload", async function() {
+		let resGet = await users[0].Post(`/projects/${project1.id}/metrics`, {});
 
-		expect(response.statusCode).to.equals(400);
+		expect(resGet.statusCode).to.equals(400);
 
-		response = await users[0].Post(`/projects/${project1.id}/metrics`, {
+		resGet = await users[0].Post(`/projects/${project1.id}/metrics`, {
 			type: "numeric"
 		});
 
-		expect(response.statusCode).to.equals(400);
+		expect(resGet.statusCode).to.equals(400);
 	});
 
-	it ("Adds a metric", async function() {
-		const response = await users[0].Post(`/projects/${project1.id}/metrics`, {
+	it ("Add a metric", async function() {
+		const resAdd = await users[0].Post(`/projects/${project1.id}/metrics`, {
 			name: "metric 1",
 			type: "numeric"
 		});
+		expect(resAdd.statusCode).to.equals(201);
 
-		expect(response.statusCode).to.equals(201);
+		const resGet = await users[0].Get(`/projects/${project1.id}/metrics`);
+
+		expect(resGet.statusCode).to.equals(200);
+		expect(resGet.body).to.be.a("array");
+		expect(resGet.body).to.have.length(1);
+		metric1 = resGet.body[0];
 	});
 
-	it ("Returns metric list with 1 result as [User 1]", async function() {
-		const response = await users[0].Get(`/projects/${project1.id}/metrics`);
-
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(1);
-		metric1 = response.body[0];
-	});
-
-	it ("Returns metric list with 1 result on project 1 as [Key 1]", async function() {
+	it ("Get metrics with [Api Key 1]", async function() {
+		await users[0].Post(`/projects/${project1.id}/metrics`, {
+			name: "metric 1",
+			type: "numeric"
+		});
 		const response = await project1ApiKey1.Get(`/projects/${project1.id}/metrics`);
 
 		expect(response.statusCode).to.equals(200);
@@ -122,34 +122,40 @@ describe("Metrics", function () {
 		expect(response.body).to.have.length(1);
 	});
 
-	it ("Adds data point to metric 1 on project 1 as [Key 1]", async function() {
-
-		const response = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metric1.id}`, {
+	it ("Set value of a metric as [Api Key 1]", async function() {
+		const resAddMetric = await users[0].Post(`/projects/${project1.id}/metrics`, {
+			name: "metric 1",
+			type: "numeric"
+		});
+		const metricId = resAddMetric.body.id
+		const resSetValue = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metricId}`, {
 			value: 42
 		});
+		expect(resSetValue.statusCode).to.equals(201);
 
-		expect(response.statusCode).to.equals(201);
+		const resGet = await users[0].Get(`/projects/${project1.id}/metrics`);
+
+		expect(resGet.statusCode).to.equals(200);
+		expect(resGet.body).to.be.a("array");
+		expect(resGet.body).to.have.length(1);
+		expect(resGet.body[0].history).to.have.length(1);
+		expect(resGet.body[0].history[0].value).to.equals(42);
 	});
 
-	it ("Returns metric list with 1 result and check data point as [User 1]", async function() {
-		const response = await users[0].Get(`/projects/${project1.id}/metrics`);
-
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(1);
-		expect(response.body[0].history).to.have.length(1);
-		expect(response.body[0].history[0].value).to.equals(42);
-	});
-
-	it ("Simple rate limit test for [Key 1]", async function() {
+	it ("Simple rate limit test for [Api Key 1]", async function() {
 		process.env.RATE_LIMIT_ENABLED = 'true'
-		const response1 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metric1.id}`, {
+		const resAddMetric = await users[0].Post(`/projects/${project1.id}/metrics`, {
+			name: "metric 1",
+			type: "numeric"
+		});
+		const metricId = resAddMetric.body.id
+		const response1 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metricId}`, {
 			value: 42
 		});
 
 		expect(response1.statusCode).to.equals(201);
 
-		const response2 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metric1.id}`, {
+		const response2 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metricId}`, {
 			value: 43
 		});
 
@@ -157,7 +163,7 @@ describe("Metrics", function () {
 
 		await sleep(1100)
 
-		const response3 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metric1.id}`, {
+		const response3 = await project1ApiKey1.Post(`/projects/${project1.id}/metrics/${metricId}`, {
 			value: 44
 		});
 

@@ -28,7 +28,7 @@ export class ProjectsUseCases {
 		this._apiKeyRepository = dependencies.apiKeyRepository
 	}
 
-	async createProject(owner: User, name: string): Promise<void> {
+	async createProject(owner: User, name: string): Promise<Project> {
 		const userProjects = await this._projectRepository.findProjectsOfUser(owner);
 		if (userProjects.length >= getAccountProjectsLimit()) {
 			throw new LimitReached(`Maximum account limit (${getAccountProjectsLimit()}) reached`)
@@ -41,6 +41,7 @@ export class ProjectsUseCases {
 			updatedAt: Date.now()
 		});
 		this._projectEvents.onProjectCreated.emit({project, caller: new Caller(owner)})
+		return project;
 	}
 
 	async getProjectsOfUser(user: User): Promise<Project[]> {

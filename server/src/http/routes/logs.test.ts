@@ -13,7 +13,7 @@ describe("Logs", function () {
 	let project2: any
 	let project2ApiKey1: TestApiKey
 
-	before(async function () {
+	beforeEach(async function () {
 		// Setup the server and app
 		await deleteDatabase();
 		server = await buildTestServer();
@@ -88,37 +88,30 @@ describe("Logs", function () {
 	});
 
 	it ("[K1-1 > P1] Add log to p1", async function() {
-		const response = await project1ApiKey1.Post(`/projects/${project1.id}/logs`, {
+		const resAddLog = await project1ApiKey1.Post(`/projects/${project1.id}/logs`, {
+			title: "title1",
+			content: "content1",
+			tags: []
+		});
+		expect(resAddLog.statusCode).to.equals(201);
+
+		const resGetLogs = await users[0].Get(`/projects/${project1.id}/logs`);
+		expect(resGetLogs.statusCode).to.equals(200);
+		expect(resGetLogs.body).to.be.a("array");
+		expect(resGetLogs.body).to.have.length(2);
+	});
+
+	it ("[K1-1 > P1] Get logs with 2 entries", async function() {
+		await project1ApiKey1.Post(`/projects/${project1.id}/logs`, {
 			title: "title1",
 			content: "content1",
 			tags: []
 		});
 
-		expect(response.statusCode).to.equals(201);
-	});
-
-	it ("[User 1] Get logs with 2 entries", async function() {
-		const response = await users[0].Get(`/projects/${project1.id}/logs`);
-
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(2);
-	});
-
-	it ("[K1-1 > P1] Get logs with 2 entries", async function() {
-		const response = await project1ApiKey1.Get(`/projects/${project1.id}/logs`);
-
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(2);
-	});
-
-	it ("[K1-2 > P1] Get logs with 2 entries", async function() {
-		const response = await project1ApiKey2.Get(`/projects/${project1.id}/logs`);
-
-		expect(response.statusCode).to.equals(200);
-		expect(response.body).to.be.a("array");
-		expect(response.body).to.have.length(2);
+		const resGetLogs = await project1ApiKey1.Get(`/projects/${project1.id}/logs`);
+		expect(resGetLogs.statusCode).to.equals(200);
+		expect(resGetLogs.body).to.be.a("array");
+		expect(resGetLogs.body).to.have.length(2);
 	});
 
 	it ("[K2-1 > P1] Return error (401)", async function() {

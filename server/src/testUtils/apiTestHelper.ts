@@ -161,6 +161,10 @@ export class TestUser {
 		return true;
 	}
 
+	async Logout(): Promise<void> {
+		this._authorization = ""
+	}
+
 	async Get(url: string): Promise<ResponseHelper> {
 		const response = await this._server.inject({
 			method: "GET",
