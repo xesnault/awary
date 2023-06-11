@@ -45,6 +45,10 @@ export class ProjectsRepository {
 		return this._format({...result, id: result._id.toString()})
 	}
 
+	async count(): Promise<number> {
+		return this._projects.countDocuments();
+	}
+
 	/*async createLog(data: Omit<LogData, "id">): Promise<void> {
 		await this._projectsLogs.insertOne(data);
 	}

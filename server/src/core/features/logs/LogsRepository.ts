@@ -65,4 +65,8 @@ export class LogsRepository {
 			_id: new ObjectId(log.id),
 		});
 	}
+	
+	async count(): Promise<number> {
+		return this._projectsLogs.countDocuments();
+	}
 }

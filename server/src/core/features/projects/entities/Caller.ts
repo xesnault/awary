@@ -6,19 +6,26 @@ export class SystemCaller {
 
 }
 
+export class AdminUser {
+
+}
+
 export class Caller {
 
 	private _user?: User
 	private _apiKey?: ApiKey
 	private _isSystem = false
+	private _isAdmin = false
 
-	constructor(caller: User | ApiKey | SystemCaller) {
+	constructor(caller: User | ApiKey | SystemCaller | AdminUser) {
 		if (caller instanceof User) {
 			this._user = caller
 		} else if (caller instanceof ApiKey) {
 			this._apiKey = caller
 		} else if (caller instanceof SystemCaller) {
 			this._isSystem = true
+		} else if (caller instanceof AdminUser) {
+			this._isAdmin = true
 		} else {
 			throw new Error("Wrong type for Caller constructor")
 		}
@@ -46,6 +53,10 @@ export class Caller {
 
 	isSystem(): boolean {
 		return this._isSystem;
+	}
+
+	isAdmin(): boolean {
+		return this._isAdmin;
 	}
 
 	asApiKey(): ApiKey {

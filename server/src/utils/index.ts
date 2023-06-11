@@ -3,3 +3,5 @@ export function sleep(ms: number) {
 		setTimeout(resolve, ms);
 	});
 }
+
+export const ADMIN_TOKEN = process.env.API_ADMIN_AUTHORIZATION as string;

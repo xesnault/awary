@@ -1,9 +1,10 @@
 import {App} from "@app/core";
-import {Caller} from "@app/core/features/projects/entities/Caller";
+import {AdminUser, Caller} from "@app/core/features/projects/entities/Caller";
 import {Project} from "@app/core/features/projects/entities/Project";
 import {ProjectContext} from "@app/core/features/projects/ProjectContext";
 import {User} from "@app/core/features/users/entities";
 import {AuthenticationFailed} from "@app/core/features/users/exceptions/AuthenticationFailed";
+import { ADMIN_TOKEN } from "@app/utils";
 import {FastifyReply, FastifyRequest} from "fastify";
 import {Logger} from "utils/logger";
 
@@ -67,11 +68,15 @@ export function withData(app: App, required: AppData[]) {
 				if (typeof token !== "string") {
 					throw new AuthenticationFailed("Unknown authorization token");
 				}
-				const apiKey = await apiKeyRepository.findByKey(token);
-				if (!apiKey) {
-					throw new AuthenticationFailed("Unknown authorization token");
+				if (token === ADMIN_TOKEN) {
+					caller = new Caller(new AdminUser())
+				} else {
+					const apiKey = await apiKeyRepository.findByKey(token);
+					if (!apiKey) {
+						throw new AuthenticationFailed("Unknown authorization token");
+					}
+					caller = new Caller(apiKey)
 				}
-				caller = new Caller(apiKey)
 			}
 			if (!caller) {
 				throw new AuthenticationFailed("Unknown authorization token");

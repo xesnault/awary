@@ -5,7 +5,7 @@ export class FeatureEvent<T> {
 		this.callbacks.push(callback)
 	}
 
-	emit(data: T) {
-		this.callbacks.forEach(callback => callback(data))
+	async emit(data: T): Promise<void> {
+		await Promise.all(this.callbacks.map(callback => callback(data)))
 	}
 }

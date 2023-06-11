@@ -29,7 +29,7 @@ export class MetricsUseCases {
 		const {project, caller} = context;
 		
 		const metric = await this._metricRepository.createMetric(project, metricInfo.name)
-		this._metricEvents.onMetricCreated.emit({project, metric: metric, caller});
+		await this._metricEvents.onMetricCreated.emit({project, metric: metric, caller});
 		return metric
 	}
 

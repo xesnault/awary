@@ -16,6 +16,7 @@ import { Logger } from "utils/logger";
 import {projectsRoutes, usersRoutes, logsRoutes, metricsRoutes} from "./routes";
 import {viewsRoutes} from "./routes/views.routes";
 import {LimitReached} from "@app/core/exceptions/LimitReached";
+import { adminRoutes } from "./routes/admin.routes";
 
 export type FastifyTypebox = FastifyInstance<
   RawServerDefault,
@@ -140,6 +141,7 @@ export class HttpServer {
 		this.server.register(logsRoutes(this.app));
 		this.server.register(metricsRoutes(this.app));
 		this.server.register(viewsRoutes(this.app));
+		this.server.register(adminRoutes(this.app));
 	
 		return this.server;
 	}

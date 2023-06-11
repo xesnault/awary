@@ -6,6 +6,7 @@ import { LogFeature } from "./features/logs";
 import {ActivityLoggerFeature} from "./features/activityLogger";
 import {ViewsFeature} from "./features/views";
 import {Logger} from "@app/utils/logger";
+import { ServerAdminFeature } from "./features/serverAdmin";
 
 export class App {
 
@@ -16,6 +17,7 @@ export class App {
 	metricFeature: MetricFeature
 	viewsFeature: ViewsFeature
 	activityLogger: ActivityLoggerFeature
+	serverAdminFeature: ServerAdminFeature
 
 	constructor(db: Db) {
 		const services = {db}
@@ -25,6 +27,7 @@ export class App {
 		this.metricFeature = new MetricFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature})
 		this.viewsFeature = new ViewsFeature(services, {metricFeature: this.metricFeature})
 		this.activityLogger = new ActivityLoggerFeature(services, {projectFeature: this.projectFeature, logFeature: this.logFeature, metricFeature: this.metricFeature})
+		this.serverAdminFeature = new ServerAdminFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature, logFeature: this.logFeature, metricFeature: this.metricFeature})
 	}
 
 	async start(): Promise<void> {

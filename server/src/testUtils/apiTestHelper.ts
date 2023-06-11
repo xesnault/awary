@@ -161,8 +161,12 @@ export class TestUser {
 		return true;
 	}
 
-	async Logout(): Promise<void> {
+	async Logout() {
 		this._authorization = ""
+	}
+
+	async SetAuthorization(authorization: string) {
+		this._authorization = authorization;
 	}
 
 	async Get(url: string): Promise<ResponseHelper> {

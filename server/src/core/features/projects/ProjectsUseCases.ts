@@ -40,7 +40,7 @@ export class ProjectsUseCases {
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		});
-		this._projectEvents.onProjectCreated.emit({project, caller: new Caller(owner)})
+		await this._projectEvents.onProjectCreated.emit({project, caller: new Caller(owner)})
 		return project;
 	}
 

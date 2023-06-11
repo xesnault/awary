@@ -45,9 +45,6 @@ export class MetricsRepository {
 	}
 
 	async createMetric(project: Project, name: string): Promise<Metric> {
-		if (await this.MetricExists(project, name)) {
-			throw new Error(`Can't create metric '${name}' for project '${project.id}' because it already exists`)
-		}
 		const metric = await this._metrics.insertOne({
 			projectId: new ObjectId(project.id),
 			name: name,
@@ -133,5 +130,13 @@ export class MetricsRepository {
 
 	async getHistoryLengthOfMetric(metric: Metric): Promise<number> {
 		return this._metricsHistory.countDocuments({metricId: new ObjectId(metric.id)});
+	}
+
+	async count(): Promise<number> {
+		return this._metrics.countDocuments();
+	}
+
+	async countHistory(): Promise<number> {
+		return this._metricsHistory.countDocuments();
 	}
 }
