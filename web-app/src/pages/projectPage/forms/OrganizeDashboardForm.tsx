@@ -61,7 +61,22 @@ export function OrganizeDashboardForm(props: OrganizeDashboardFormProps) {
 			})),
 			charts: []
 		}
-		const x: DashboardView = props.dashboard ? clone(props.dashboard.config) : defaultDashboard 
+		let x: DashboardView = defaultDashboard;
+		if (props.dashboard) {
+			x = clone(props.dashboard.config)
+			props.metrics.forEach((metric, index)=> {
+				if (!x.metrics.find(m => m.metricId === metric.id)) {
+					x.metrics.push({
+						metricId: metric.id,
+						name: metric.name,
+						order: index,
+						show: false,
+						color: "#dddddd"
+					})
+				}
+			})
+			x.metrics = x.metrics.filter(metric => props.metrics.find(m => m.id === metric.metricId))
+		}
 		x.metrics.sort((a, b) => a.order - b.order)
 		setMetricsOrder(x)
 	}, [])
