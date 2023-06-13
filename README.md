@@ -1,14 +1,12 @@
 **This software is under development and not stable**
   
-Awary allows you to register events and metrics.  
+Awary allows you to register events and metrics.
 
-# Getting started with Awary
-
-Awary is made of 2 parts: the server and the web app, both in typescript.  
+![image](https://github.com/xesnault/awary/assets/22960612/407fb5f0-38f3-4775-8a4a-3deaf203c8d4)
 
 ## Quickstart
 
-Awary use mongoDB to store the data, a docker file for quick DB setup is provided for simplicity but you can link to your own instance and not use docker if you want.
+*Note: the repository has a docker-compose file for the MongoDB database but you can connect to your own instance if you want.*
 
 ### Prerequisites
 
@@ -24,10 +22,10 @@ Awary use mongoDB to store the data, a docker file for quick DB setup is provide
 ### Launch it
 
 1. `make db` to launch MongoDB with docker (optional).
-2. `make server-setup` to install the server dependencies (only the first time)
-3. `make web-app-setup` to install the web app dependencies (only the first time)
-4. `make server` to launch the server
-5. `make web-app` to launch the web app
+2. `make server-setup` to install the server dependencies (only the first time).
+3. `make web-app-setup` to install the web app dependencies (only the first time).
+4. `make server` to launch the server.
+5. `make web-app` to launch the web app.
 
 ## Building the documentation
 
