@@ -49,14 +49,18 @@ export default function Chart({charts}: ChartProps) {
 		color: d.color,
 		data: lastDays(d.data, d.alwaysUseLastValue, daysRange)
 	}))
-	const d: {
+	const chartData: {
 		values: number[]
 		date: string
-	}[] = processedData[0].data.map(a => ({date: a.date, values: [a.value || 0]}))
+	}[] = []
 
-	for (let i = 1; i < processedData.length; ++i) {
-		for (let j = 0; j < d.length; ++j) {
-			d[j].values.push(processedData[i].data[j].value || 0)
+	for (let i = 0; i < processedData.length; ++i) {
+		for (let j = 0; j < daysRange; ++j) {
+			if (i === 0) {
+				chartData.push({date: processedData[i].data[j].date, values: [processedData[i].data[j].value || 0]})
+				continue;
+			}
+			chartData[j].values.push(processedData[i].data[j].value || 0)
 		}
 	}
 
@@ -77,8 +81,8 @@ export default function Chart({charts}: ChartProps) {
 			</div>
 			<div className="border-b border-b-neutral-500 my-4"/>
 			<ResponsiveContainer width="99%" height={180}>
-				<ComposedChart data={d}>
-				{d.map((lineData, index) => {
+				<ComposedChart data={chartData}>
+				{chartData.map((_, index) => {
 					if (charts[index]?.type === "line")
 						return <Line type="monotone" dataKey={`values[${index}]`} dot={false} name={charts[index]?.name} stroke={charts[index].color} />
 					if (charts[index]?.type === "bar")
