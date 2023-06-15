@@ -23,7 +23,7 @@ export class ActivityLoggerFeature extends Feature {
 		this.dependencies = dependencies
 		this.service = new ActivityLoggerService({
 			projectFeature: this.dependencies.projectFeature,
-			logService: this.dependencies.logFeature.service,
+			logService: this.dependencies.logFeature.useCases,
 			metricFeature: this.dependencies.metricFeature
 		})
 	}

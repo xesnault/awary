@@ -2,7 +2,11 @@ export interface LogData {
 	id: string,
 	title: string,
 	content: string,
-	tags: string[]
+	tags: {
+		id: string
+		name: string
+		color: string
+	}[]
 	projectId: string
 	createdAt: number
 	createdBy: string

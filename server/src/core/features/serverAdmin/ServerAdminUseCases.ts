@@ -37,7 +37,7 @@ export class ServerAdminUseCases {
 
 		const userCount = await this._userFeature.repository.count();
 		const projectCount = await this._projectFeature.projectRepository.count();
-		const logCount = await this._logFeature.repository.count();
+		const logCount = await this._logFeature.logsRepository.count();
 		const metricCount = await this._metricFeature.repository.count();
 		const metricHistoryEntryCount = await this._metricFeature.repository.countHistory();
 

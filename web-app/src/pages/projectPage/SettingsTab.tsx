@@ -18,10 +18,6 @@ export default function SettingsTab({project, onUpdate}: SettingsTabProps) {
 			renderer: <div>General</div>
 		},
 		{
-			label: "Tags",
-			renderer: <TagsSettings project={project} onUpdate={onUpdate}/>
-		},
-		{
 			label: "Api keys",
 			renderer: <ApiKeysSettings project={project}/>
 		}

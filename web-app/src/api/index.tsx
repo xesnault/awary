@@ -3,6 +3,7 @@ import {ApiKey, ApiKeyData} from "../core/ApiKey";
 import {Log, LogData} from "../core/Log";
 import {Metric, MetricData, MetricDataOnCreation, MetricDataOnUpdate} from "../core/Metric";
 import {Project, ProjectData} from "../core/Project";
+import { Tag, TagData } from "../core/Tag";
 import {View, ViewDataOnCreation, ViewDataOnUpdate} from "../core/View";
 import {DashboardView} from "../pages/projectPage/forms/OrganizeDashboardForm";
 
@@ -193,6 +194,11 @@ export class Api extends React.Component<MyProps, MyState> {
 		return logsData.map(data => new Log(data));
 	}
 
+	public async fetchProjectTags(id: string): Promise<Tag[]> {
+		const tagsData = await this._Get(`/projects/${id}/tags`) as TagData[];
+		return tagsData.map(data => new Tag(data));
+	}
+
 	public async deleteLog(projectId: string, logId: string): Promise<void> {
 		await this._Delete(`/projects/${projectId}/logs/${logId}`);
 	}
@@ -265,8 +271,12 @@ export class Api extends React.Component<MyProps, MyState> {
 		return this._Post(`/projects/${projectId}/tags`, data);
 	}
 
-	public async updateTag(projectId: string, data: {name: string, color: string}): Promise<void> {
-		return this._Put(`/projects/${projectId}/tags`, data);
+	public async updateTag(projectId: string, tagId: string, data: {name: string, color: string}): Promise<void> {
+		return this._Put(`/projects/${projectId}/tags/${tagId}`, data);
+	}
+
+	public async deleteTag(projectId: string, tagId: string): Promise<void> {
+		return this._Delete(`/projects/${projectId}/tags/${tagId}`);
 	}
 
 	public IsLogged(): boolean {

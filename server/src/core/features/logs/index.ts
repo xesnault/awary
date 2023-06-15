@@ -4,6 +4,7 @@ import { ProjectFeature } from "../projects";
 import { UserFeature } from "../users";
 import { LogsRepository } from "./LogsRepository";
 import { LogsUseCases } from "./LogsUseCases";
+import { TagsRepository } from "./TagsRepository";
 
 export type LogFeatureDependencies = {
 	userFeature: UserFeature
@@ -13,17 +14,20 @@ export type LogFeatureDependencies = {
 export class LogFeature extends Feature {
 
 	name = "Log"
-	repository: LogsRepository
-	service: LogsUseCases
+	logsRepository: LogsRepository
+	tagsRepository: TagsRepository
+	useCases: LogsUseCases
 	dependencies: LogFeatureDependencies
 
 	constructor(services: AppServices, dependencies: LogFeatureDependencies) {
 		super(services);
-		this.repository = new LogsRepository(services.db)
+		this.logsRepository = new LogsRepository(services.db)
+		this.tagsRepository = new TagsRepository(services.db)
 		this.dependencies = dependencies
-		this.service = new LogsUseCases({
+		this.useCases = new LogsUseCases({
 			projectService: this.dependencies.projectFeature.service,
-			logRepository: this.repository
+			logsRepository: this.logsRepository,
+			tagsRepository: this.tagsRepository
 		})
 	}
 }

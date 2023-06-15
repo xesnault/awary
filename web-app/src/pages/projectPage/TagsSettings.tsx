@@ -1,10 +1,11 @@
+import { TrashIcon } from "@heroicons/react/outline"
 import {useState} from "react"
 import {useApi} from "../../api"
 import Button from "../../components/Button"
 import Card from "../../components/Card"
 import LineEdit from "../../components/Input"
 import {Project} from "../../core/Project"
-import {TagData} from "../../core/Tag"
+import {Tag, TagData} from "../../core/Tag"
 import {useModal} from "../../services/ModalService"
 import {TagForm} from "./forms/TagForm"
 import {TagSticker} from "./LogsTab"
@@ -14,37 +15,37 @@ function clone<T>(x: T): T {
 }
 
 interface TagsSettingsProps {
-	project: Project
-	onUpdate: () => void
+	tags: TagData[]
+	onSave: (tags: TagData[]) => void
 }
 
-export function TagsSettings({project, onUpdate}: TagsSettingsProps) {
+export function TagsSettings({tags: originalTags, onSave}: TagsSettingsProps) {
 	const api = useApi()
 	const modalService = useModal()
 
-	const [tags, setTags] = useState(project.tags)
+	const [tags, setTags] = useState(originalTags)
 
-	const createTag = async (data: TagData) => {
-		await api.createTag(project.id, data);
-		onUpdate();
+	const addTag = (tag: TagData) => {
+		const newTags = clone(tags)
+		newTags.push(tag)
+		setTags(newTags)
 	}
 
-	const updateTags = async () => {
-		await Promise.all(tags.map(async tag => {
-			const originalTag = project.tags.find(originaltag => originaltag.id === tag.id)
-			if (originalTag && (originalTag.name !== tag.name || originalTag.color !== tag.color)) {
-				await api.updateTag(project.id, tag);
-			}
-		}))
-		onUpdate();
+	const deleteTag = (tag: TagData) => {
+		const newTags = clone(tags).filter(newTags => newTags.id !== tag.id)
+		setTags(newTags)
+	}
+
+	const saveTags = async () => {
+		onSave(tags);
 	}
 
 	const header = 
-		<div className="f-r justify-between">
+		<div className="f-r justify-between gap-4">
 			<h2>Tags</h2>
 			<Button
 				text="Create tag"
-				onClick={() => {modalService.addModal((close) => <TagForm close={close} onCreate={createTag}/>)}}
+				onClick={() => {modalService.addModal((close) => <TagForm close={close} onCreate={addTag}/>)}}
 			/>
 		</div>
 
@@ -63,14 +64,24 @@ export function TagsSettings({project, onUpdate}: TagsSettingsProps) {
 	return (
 		<div className="f-c gap-4 flex-1">
 			<Card header={header}>
-				<div className="f-c gap-2">
+				<div className="f-c gap-4">
 					{tags.map((tag, tagIndex) =>
-						<div key={tagIndex} className="f-r items-center gap-2">
-							<LineEdit value={tag.name} onChange={(value) => {setNameOfTag(tagIndex, value)}}/>
-							<input type="color" value={tag.color} onChange={(event) => {setColorOfTag(tagIndex, event.target.value)}}/>
+						<div className="f-c gap-1">
+							<div key={tagIndex} className="f-r items-center gap-2">
+								<LineEdit value={tag.name} onChange={(value) => {setNameOfTag(tagIndex, value)}}/>
+								<input type="color" value={tag.color} onChange={(event) => {setColorOfTag(tagIndex, event.target.value)}}/>
+								<TrashIcon
+									className="w-4 h-4 text-red-300 cursor-pointer"
+									// I need setTimeout or the modal will close itself, need to investigate 
+									onClick={() => {setTimeout(() => {deleteTag(tag)}, 0)}}
+								/>
+							</div>
+							<div className="px-1 opacity-25 text-xs">
+								id: {tag.id || "Id will appear after creation"}
+							</div>
 						</div>
 					)}
-					<Button text="Save" onClick={updateTags}/>
+					<Button text="Save" onClick={saveTags}/>
 				</div>
 			</Card>
 		</div>

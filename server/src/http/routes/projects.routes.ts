@@ -1,6 +1,6 @@
 import {FastifyInstance} from "fastify";
 import {Static} from "@sinclair/typebox";
-import {CreateApiKeyBody, CreateApiKeyParams, CreateProjectBody, CreateTagBody, DeleteApiKeyParams, UpdateTagBody} from "./projects.def";
+import {CreateApiKeyBody, CreateApiKeyParams, CreateProjectBody, DeleteApiKeyParams} from "./projects.def";
 import {App} from "@app/core";
 import {AppData, withData} from "http/utils";
 import {ProjectAuthorization, ProjectContext} from "@app/core/features/projects/ProjectContext";
@@ -46,33 +46,7 @@ export function projectsRoutes(app: App) {
 				return context.project.getState();
 			});
 
-		server.post<{Body: Static<typeof CreateTagBody>}>(
-			"/projects/:projectId/tags",
-			{
-				preValidation: [withData(app, [AppData.Context])],
-				schema: {body: CreateTagBody}
-			},
-			async function (request, reply) {
-				const {context} = request.data;
-				const {name, color} = request.body;
-				await projectService.addTagToProject(context, {name, color})
-				reply.status(201).send({});
-			}
-		);
-
-		server.put<{Body: Static<typeof UpdateTagBody>}>(
-			"/projects/:projectId/tags",
-			{
-				preValidation: [withData(app, [AppData.Context])],
-				schema: {body: UpdateTagBody}
-			},
-			async function (request, reply) {
-				const {context} = request.data;
-				const {id, name, color} = request.body;
-				await projectService.updateTagOfProject(context, id, {name, color})
-				reply.status(201).send({});
-			}
-		);
+		
 		
 		server.get("/projects/:projectId/apiKeys",
 			{

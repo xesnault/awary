@@ -1,7 +1,7 @@
 import {Collection, Db, ObjectId, WithId} from "mongodb";
 import { Project } from "../projects/entities/Project";
 import { Log } from "./entities/Log";
-import { LogData, LogDataOnCreation } from "./entities/LogData";
+import {LogDataOnCreation, Tag } from "./entities";
 
 export interface LogDocument {
 	projectId: ObjectId
@@ -16,7 +16,7 @@ function ConvertLogDocumentToEntity(document: WithId<LogDocument>):  Log {
 		id: document._id.toString(),
 		projectId: document.projectId.toString(),
 		title: document.title,
-		tags: document.tags,
+		tags: document.tags || [],
 		content: document.content,
 		createdAt: document.createdAt
 	})
