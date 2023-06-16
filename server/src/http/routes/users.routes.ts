@@ -18,7 +18,7 @@ export function usersRoutes(app: App) {
 			async (request, reply) => {
 				const {email, password, adminToken} = request.body;
 				await usersUseCases.signupUser(email, password, adminToken)
-				reply.send({success: true});
+				reply.status(201).send({success: true});
 			}
 		);
 

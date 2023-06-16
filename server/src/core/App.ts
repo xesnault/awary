@@ -26,7 +26,7 @@ export class App {
 		this.logFeature = new LogFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature})
 		this.metricFeature = new MetricFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature})
 		this.viewsFeature = new ViewsFeature(services, {metricFeature: this.metricFeature})
-		this.activityLogger = new ActivityLoggerFeature(services, {projectFeature: this.projectFeature, logFeature: this.logFeature, metricFeature: this.metricFeature})
+		this.activityLogger = new ActivityLoggerFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature, logFeature: this.logFeature, metricFeature: this.metricFeature})
 		this.serverAdminFeature = new ServerAdminFeature(services, {userFeature: this.userFeature, projectFeature: this.projectFeature, logFeature: this.logFeature, metricFeature: this.metricFeature})
 	}
 

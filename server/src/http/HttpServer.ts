@@ -122,7 +122,7 @@ export class HttpServer {
 				statusCode = 422;
 			}
 
-			if (statusCode){
+			if (statusCode) {
 				reply.status(statusCode).send({error: err.message})
 			} else {
 				reply.send(err)

@@ -154,7 +154,7 @@ export class Api extends React.Component<MyProps, MyState> {
 		}) 
 		const userData = (await response.json()) as any
 
-		if (response.status !== 200) {
+		if (response.status !== 201) {
 			this.setState({logged: false, token: null, userData: null})
 			throw Error(userData?.message|| "Sign up error")
 		}

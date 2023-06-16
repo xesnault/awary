@@ -98,7 +98,7 @@ describe("Users", function () {
 
 		it("Fail to sign up because email is already taken", async function () {
 			const resSignup1 = await signupReq(users[0].email, users[0].password)
-			expect(resSignup1.statusCode).to.equals(200);
+			expect(resSignup1.statusCode).to.equals(201);
 
 			const resSignup2 = await signupReq(users[0].email, users[1].password)
 			expect(resSignup2.statusCode).to.equals(409);
@@ -106,7 +106,7 @@ describe("Users", function () {
 
 		it("Succeed to sign up a new user", async function () {
 			const res = await signupReq(users[0].email, users[0].password)
-			expect(res.statusCode).to.equals(200);
+			expect(res.statusCode).to.equals(201);
 		});
 	})
 
@@ -156,7 +156,7 @@ describe("Users", function () {
 					password: users[0].password,
 				}
 			});
-			expect(response.statusCode).to.equals(200);
+			expect(response.statusCode).to.equals(201);
 		})
 
 		it ("Fail (400) when a required property is missing", async function() {

@@ -4,9 +4,21 @@ import argon2 from "argon2";
 import {AuthenticationFailed} from "./exceptions/AuthenticationFailed";
 import {getAccountCreationLimit, isRegistrationEnabled} from "./utils";
 import {SignupFailed, SignupFailedCode} from "./exceptions/SignupFailed";
+import { UserEvents } from "./UsersEvents";
+import { Caller, SystemCaller } from "../projects/entities/Caller";
+
+interface UsersUseCasesDependencies {
+	repository: UsersRepository,
+	events: UserEvents
+}
 
 export class UsersUseCases {
-	constructor(private _repository: UsersRepository) {
+	private _repository: UsersRepository
+	private _events: UserEvents
+
+	constructor(dependencies: UsersUseCasesDependencies) {
+		this._repository = dependencies.repository
+		this._events = dependencies.events
 	}
 
 	// [TODO] This function doesn't really belong here, make a new feature (ex: reporter)
@@ -45,6 +57,14 @@ export class UsersUseCases {
 			createdAt: Date.now(),
 			updatedAt: Date.now()
 		});
+
+		const createdUser = await this._repository.findUserByEmail(email)
+
+		if (!createdUser) {
+			throw new SignupFailed("Error in user creation", SignupFailedCode.Unknown)
+		}
+		const caller = new Caller(new SystemCaller())
+		await this._events.onMetricCreated.emit({user: new User(createdUser), caller})
 
 		/*if (!process.env.TEST) {*/
 		/*await mailService.SendMail(*/

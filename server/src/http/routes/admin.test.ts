@@ -1,5 +1,5 @@
 import {beforeDescribe} from "@app/testUtils/mochaExtensions";
-import {ADMIN_TOKEN, sleep} from "@app/utils";
+import {ADMIN_TOKEN, getAdminSucessTagId, sleep} from "@app/utils";
 import {expect} from "chai";
 import {HttpServer} from "http/HttpServer";
 import {buildTestServer, deleteDatabase, setupNewUsers, TestApiKey, TestUser} from "testUtils/apiTestHelper";
@@ -102,5 +102,48 @@ describe("Admin", function () {
 				metricHistoryEntryCount: 3
 			})
 		});
+	})
+
+	describe("Internal log to admin project", function() {
+
+		beforeEach(async function () {
+			const resAddProject1 = await users[0].Post("/projects", {name: "p1"});
+			project1Id = resAddProject1.body.id;
+			const resAddTag = await users[0].Post(`/projects/${project1Id}/tags`, {
+				name: "Success",
+				color: "#00ff00"
+			});
+			process.env.ADMIN_PROJECT_ID = project1Id
+			process.env.ADMIN_SUCCESS_TAG_ID = resAddTag.body.id
+		});
+
+		it("Add log when an user is created", async function() {
+			const resGetLogs1 = await users[0].Get(`/projects/${project1Id}/logs`);
+			expect(resGetLogs1.statusCode).to.equals(200);
+			expect(resGetLogs1.body).to.have.length(1);
+
+			const userEmail = "user.email@something.happy"
+			const resAddUser = await server.inject({
+				method: "POST",
+				url: "/signup",
+				payload: {
+					email: userEmail,
+					password: "SomePassword",
+				}
+			});
+			expect(resAddUser.statusCode).to.equals(201);
+
+			const resGetLogs2 = await users[0].Get(`/projects/${project1Id}/logs`);
+			expect(resGetLogs2.statusCode).to.equals(200);
+			expect(resGetLogs2.body).to.have.length(2);
+			expect(resGetLogs2.body[0].title).to.equals(`New user: ${userEmail}`);
+			expect(resGetLogs2.body[0].tags).to.have.length(1);
+			expect(resGetLogs2.body[0].tags[0].id).to.equals(getAdminSucessTagId());
+		});
+		
+		afterEach(function () {
+			delete process.env.ADMIN_PROJECT_ID
+			delete process.env.ADMIN_SUCCESS_TAG_ID
+		})
 	})
 });

@@ -7,6 +7,7 @@ import { UserFeature } from "../users";
 import {ActivityLoggerService} from "./ActivityLogger";
 
 export type ActivityLoggerFeatureDependencies = {
+	userFeature: UserFeature
 	projectFeature: ProjectFeature
 	logFeature: LogFeature
 	metricFeature: MetricFeature
@@ -22,6 +23,7 @@ export class ActivityLoggerFeature extends Feature {
 		super(services);
 		this.dependencies = dependencies
 		this.service = new ActivityLoggerService({
+			userFeature: this.dependencies.userFeature,
 			projectFeature: this.dependencies.projectFeature,
 			logService: this.dependencies.logFeature.useCases,
 			metricFeature: this.dependencies.metricFeature

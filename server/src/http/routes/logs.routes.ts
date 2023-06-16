@@ -82,8 +82,8 @@ export function logsRoutes(app: App) {
 			async function (request, reply) {
 				const {context} = request.data;
 				const {name, color} = request.body;
-				await logUseCases.createTag(context, {name, color})
-				reply.status(201).send({});
+				const tag = await logUseCases.createTag(context, {name, color})
+				reply.status(201).send({id: tag.id});
 			}
 		);
 
