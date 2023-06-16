@@ -1,6 +1,5 @@
 import {expect} from "chai";
 import {HttpServer} from "http/HttpServer";
-import {MongoClient} from "mongodb";
 import {buildTestServer, deleteDatabase, setupNewUsers, TestUser} from "testUtils/apiTestHelper";
 
 describe("Projects", function () {

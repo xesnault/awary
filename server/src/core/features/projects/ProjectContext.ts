@@ -1,5 +1,4 @@
-import {Caller} from "./entities/Caller";
-import {Project} from "./entities/Project";
+import {Project, Caller} from "./entities";
 import {MissingAuthorization} from "./exceptions/MissingAuthorization";
 
 export enum ProjectAuthorization {

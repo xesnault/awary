@@ -1,7 +1,6 @@
-import {FastifyInstance, FastifyReply, FastifyRequest} from "fastify";
+import {FastifyInstance} from "fastify";
 import {Static} from "@sinclair/typebox";
-import {InfoBody, LoginBody, SignupBody, VerifyEmailQuerystring} from "./users.def";
-import {Logger} from "utils/logger";
+import {InfoBody, LoginBody, SignupBody} from "./users.def";
 import {App} from "@app/core";
 import {AppData, rateLimit, withData} from "http/utils";
 import {isRegistrationEnabled} from "@app/core/features/users/utils";

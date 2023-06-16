@@ -1,6 +1,5 @@
 import {FeatureEvent} from "@app/core/FeatureEvent";
-import {Caller} from "../projects/entities/Caller";
-import {Project} from "../projects/entities/Project";
+import {Project, Caller} from "../projects/entities";
 
 export type onProjectCreatedData = {
 	project: Project

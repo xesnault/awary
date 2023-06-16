@@ -1,6 +1,5 @@
 import {Collection, Db, ObjectId, WithId} from "mongodb";
-import {Logger} from "utils/logger";
-import { Project } from "../projects/entities/Project";
+import { Project } from "../projects/entities";
 import {Metric, MetricValue} from "./entities";
 
 interface MetricDocument {

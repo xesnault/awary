@@ -1,5 +1,4 @@
 import { Feature, AppServices } from "@app/core/Feature";
-import { Logger } from "utils/logger";
 import {LogFeature} from "../logs";
 import {MetricFeature} from "../metrics";
 import { ProjectFeature } from "../projects";

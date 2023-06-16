@@ -1,6 +1,5 @@
 import {FastifyInstance} from "fastify";
 import {Static} from "@sinclair/typebox";
-import {Logger} from "utils/logger";
 import {App} from "@app/core";
 import {SetMetricValueBody, SetMetricValueParams, CreateMetricBody, CreateMetricParams, UpdateMetricBody, UpdateMetricParams, DeleteHistoryRecordParams} from "./metrics.def";
 import { ProjectsUseCases } from "@app/core/features/projects/ProjectsUseCases";

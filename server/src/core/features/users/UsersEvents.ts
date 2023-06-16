@@ -1,7 +1,6 @@
 import {FeatureEvent} from "@app/core/FeatureEvent";
-import {Caller} from "../projects/entities/Caller";
-import {Project} from "../projects/entities/Project";
-import { User } from "./entities";
+import {Caller} from "../projects/entities";
+import {User} from "./entities";
 
 export type onUserCreatedData = {
 	user: User

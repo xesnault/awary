@@ -1,18 +1,13 @@
-// import {LogData} from "@app/core/components/Log/LogData";
-import {Project} from "./entities/Project";
-import {ProjectData} from "./entities/ProjectData";
-import {Tag} from "./entities/Tag";
+import {Project, ProjectData, Tag} from "./entities";
 import {User} from "@app/core/features/users/entities/User";
 import {Collection, Db, ObjectId} from "mongodb";
 
 export class ProjectsRepository {
 
 	private _projects: Collection<Omit<ProjectData, "id">>
-	//private _projectsLogs: Collection<Omit<LogData, "id">>
 
 	constructor(db: Db) {
 		this._projects = db.collection("projects")
-		//this._projectsLogs = db.collection("projectsLogs")
 	}
 
 	async createProject(data: Omit<ProjectData, "id">): Promise<Project> {

@@ -1,7 +1,6 @@
 import {Collection, Db, ObjectId, WithId} from "mongodb";
 import { Project } from "../projects/entities/Project";
-import { Log } from "./entities/Log";
-import {LogDataOnCreation, Tag } from "./entities";
+import {LogDataOnCreation, Log } from "./entities";
 
 export interface LogDocument {
 	projectId: ObjectId

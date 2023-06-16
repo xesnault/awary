@@ -1,11 +1,7 @@
 import { LogFeature } from "../logs";
-import {LogsUseCases} from "../logs/LogsUseCases";
 import {MetricFeature} from "../metrics";
-import {onMetricCreatedData} from "../metrics/MetricsEvents";
 import {ProjectFeature} from "../projects";
 import {Caller, SystemCaller} from "../projects/entities/Caller";
-import {ProjectContext} from "../projects/ProjectContext";
-import {onProjectCreatedData} from "../projects/ProjectsEvents";
 import { UserFeature } from "../users";
 import { AuthenticationFailed } from "../users/exceptions/AuthenticationFailed";
 

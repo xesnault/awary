@@ -3,7 +3,7 @@ import {Static} from "@sinclair/typebox";
 import {CreateApiKeyBody, CreateApiKeyParams, CreateProjectBody, DeleteApiKeyParams} from "./projects.def";
 import {App} from "@app/core";
 import {AppData, withData} from "http/utils";
-import {ProjectAuthorization, ProjectContext} from "@app/core/features/projects/ProjectContext";
+import {ProjectAuthorization} from "@app/core/features/projects/ProjectContext";
 
 export function projectsRoutes(app: App) {
 	const projectService = app.projectFeature.service

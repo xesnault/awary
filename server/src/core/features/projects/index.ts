@@ -1,5 +1,4 @@
 import { Feature, AppServices } from "@app/core/Feature";
-import { Logger } from "utils/logger";
 import { UserFeature } from "../users";
 import { ApiKeyRepository } from "./ApiKeyRepository";
 import {ProjectEvents} from "./ProjectsEvents";
