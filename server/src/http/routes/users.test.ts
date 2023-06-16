@@ -1,4 +1,5 @@
 import {expect} from "chai";
+import { LightMyRequestResponse } from "fastify";
 import {HttpServer} from "http/HttpServer";
 import {buildTestServer, deleteDatabase} from "testUtils/apiTestHelper";
 
@@ -29,123 +30,85 @@ async function TestRequiredBody(server: HttpServer, OriginalRequest: any) {
 	}
 }
 
-describe("Signup and Login", function () {
+let server: HttpServer;
 
-	let server: HttpServer;
+async function logReq(email: string, password: string): Promise<LightMyRequestResponse> {
+	return server.inject({
+		method: "POST",
+		url: "/login",
+		payload: {
+			email: email,
+			password: password,
+		}
+	});
+}
 
-	before(async function () {
+async function signupReq(email: string, password: string): Promise<LightMyRequestResponse> {
+	return server.inject({
+		method: "POST",
+		url: "/signup",
+		payload: {
+			email: email,
+			password: password,
+		}
+	});
+}
+
+describe("Users", function () {
+
+	beforeEach(async function () {
 		await deleteDatabase();
 		server = await buildTestServer();
 	});
 
-	it ("User registration is enabled", async function() {
-		const response = await server.inject({
-			method: "GET",
-			url: "/isUserRegistrationEnabled",
+	describe("Signup", function() {
+		it ("User registration is enabled", async function() {
+			const response = await server.inject({
+				method: "GET",
+				url: "/isUserRegistrationEnabled",
+			});
+
+			expect(response.statusCode).to.equals(200);
+			expect(response.json().enabled).to.equals(true)
 		});
 
-		expect(response.statusCode).to.equals(200);
-		expect(response.json().enabled).to.equals(true)
-	});
+		it ("Fail get current user (401) because no Bearer token is provided", async function() {
+			const response = await server.inject({
+				method: "GET",
+				url: "/auth",
+			});
 
-	it ("Fails get current user (401) because no Bearer token is provided", async function() {
-		const response = await server.inject({
-			method: "GET",
-			url: "/auth",
+			expect(response.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(401);
-	});
-
-	it ("Should fail (400) when a required property is missing", async function() {
-		await TestRequiredBody(server, {
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[0].email,
-				password: users[0].password,
-			}
-		});
-	});
-
-	it("Should fail to log in with wrong credentials", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[0].email,
-				password: users[0].password,
-			}
+		it("Fail to sign up because email has wrong format", async function () {
+			const res = await signupReq("wrong", users[1].password)
+			expect(res.statusCode).to.equals(400);
 		});
 
-		expect(response.statusCode).to.equals(401);
-	});
-
-	/*it("Should fail to sign up a new user (wrong code)", async function () {*/
-
-	/*const response = await server.inject({*/
-	/*method: "POST",*/
-	/*url: "/signup",*/
-	/*payload: {*/
-	/*email: users[0].email,*/
-	/*password: users[0].password,*/
-	/*code: "qwerty"*/
-	/*}*/
-	/*});*/
-
-	/*expect(response.statusCode).to.equals(403);*/
-	/*});*/
-
-	/*let codeForSignup = "";*/
-
-	/*it("Create a new code for sign up", async function () {*/
-
-	/*const response = await server.inject({*/
-	/*method: "POST",*/
-	/*url: "/users/codes",*/
-	/*payload: {*/
-	/*email: users[0].email,*/
-	/*tmpSecret: thisIsATemporaryPasswordToPreventUserCreation,*/
-	/*}*/
-	/*});*/
-
-	/*expect(response.statusCode).to.equals(200);*/
-	/*codeForSignup = response.body;*/
-	/*expect(codeForSignup).to.be.a.string;*/
-	/*expect(codeForSignup).to.have.length.greaterThan(0);*/
-	/*});*/
-
-	/*it("Should fail to sign up a the wrong email using right code", async function () {*/
-
-	/*const response = await server.inject({*/
-	/*method: "POST",*/
-	/*url: "/signup",*/
-	/*payload: {*/
-	/*email: users[1].email,*/
-	/*password: users[1].password,*/
-	/*code: codeForSignup*/
-	/*}*/
-	/*});*/
-
-	/*expect(response.statusCode).to.equals(403);*/
-	/*});*/
-
-	it("Should succeed to sign up a new user", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: users[0].email,
-				password: users[0].password,
-				//code: codeForSignup
-			}
+		it("Fail to sign up because email is an empty string", async function () {
+			const res = await signupReq("", users[1].password)
+			expect(res.statusCode).to.equals(400);
 		});
 
-		expect(response.statusCode).to.equals(200);
-	});
+		it("Fail to sign up because password is an empty string", async function () {
+			const res = await signupReq(users[1].email, "")
+			expect(res.statusCode).to.equals(400);
+		});
 
+		it("Fail to sign up because email is already taken", async function () {
+			const resSignup1 = await signupReq(users[0].email, users[0].password)
+			expect(resSignup1.statusCode).to.equals(200);
+
+			const resSignup2 = await signupReq(users[0].email, users[1].password)
+			expect(resSignup2.statusCode).to.equals(409);
+		});
+
+		it("Succeed to sign up a new user", async function () {
+			const res = await signupReq(users[0].email, users[0].password)
+			expect(res.statusCode).to.equals(200);
+		});
+	})
 
 	/*it("Should fail to log in with the new user because email is not verified", async function () {*/
 
@@ -183,215 +146,86 @@ describe("Signup and Login", function () {
 	/*expect(response.statusCode).to.equals(200);*/
 	/*});*/
 
-	it("Should succeed to log in with the new user", async function () {
+	describe("Login", function() {
+		beforeEach(async function() {
+			const response = await server.inject({
+				method: "POST",
+				url: "/signup",
+				payload: {
+					email: users[0].email,
+					password: users[0].password,
+				}
+			});
+			expect(response.statusCode).to.equals(200);
+		})
 
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[0].email,
-				password: users[0].password,
-			}
+		it ("Fail (400) when a required property is missing", async function() {
+			await TestRequiredBody(server, {
+				method: "POST",
+				url: "/login",
+				payload: {
+					email: users[0].email,
+					password: users[0].password,
+				}
+			});
 		});
 
-		expect(response.statusCode).to.equals(200);
-	});
-
-	/*it("Create a new code for sign up (2nd user)", async function () {*/
-
-	/*const response = await server.inject({*/
-	/*method: "POST",*/
-	/*url: "/users/codes",*/
-	/*payload: {*/
-	/*tmpSecret: thisIsATemporaryPasswordToPreventUserCreation,*/
-	/*}*/
-	/*});*/
-
-	/*expect(response.statusCode).to.equals(200);*/
-	/*codeForSignup = response.body;*/
-	/*expect(codeForSignup).to.be.a.string;*/
-	/*expect(codeForSignup).to.have.length.greaterThan(0);*/
-	/*});*/
-
-	it("Should fail to sign up because email is already taken", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: users[0].email,
-				password: users[1].password,
-			}
+		it("Fail to log in with wrong credentials", async function () {
+			const res = await logReq("abc", "def")
+			expect(res.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(409);
-	});
+		it ("Fail to get current authenticated user because of wrong jwt token", async function() {
+			const response = await server.inject({
+				method: "GET",
+				url: "/auth",
+				headers: {
+					["Authorization"]: "Bearer abcd"
+				}
+			});
 
-	it("Fails to sign up because email has wrong format", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: "wrong",
-				password: users[1].password,
-			}
+			expect(response.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(400);
-	});
-
-	it("Fails to sign up because email is an empty string", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: "",
-				password: users[1].password,
-			}
+		it("Fail to log in with password of another user", async function () {
+			const res = await logReq(users[1].email, users[0].password)
+			expect(res.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(400);
-	});
-
-	it("Fails to sign up because password is an empty string", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: users[1].email,
-				password: "",
-			}
+		it("Fail to log in with a total random password", async function () {
+			const res = await logReq(users[1].email, "qwertyasdfgzxcvb")
+			expect(res.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(400);
-	});
-
-	it("Should succeed to sign up a new user (2nd user)", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/signup",
-			payload: {
-				email: users[1].email,
-				password: users[1].password,
-			}
+		it("Fail to log in with an unknown email but existing password", async function () {
+			const res = await logReq("this_email@doesnt.exist",  users[0].password)
+			expect(res.statusCode).to.equals(401);
 		});
 
-		expect(response.statusCode).to.equals(200);
-	});
-
-	/*it("Verify the email of the 2nd user", async function () {*/
-
-	/*const user = await server.app.managers.userManager.FetchUserByEmail(users[1].email);*/
-
-	/*const response = await server.inject({*/
-	/*method: "GET",*/
-	/*url: `/signup-email-confirmation?email=${users[1].email}&emailConfirmationToken=${user?.GetDocument().emailConfirmationToken}`,*/
-	/*});*/
-
-	/*expect(response.statusCode).to.equals(200);*/
-	/*});*/
-
-	let token = "";
-
-	it("Should succeed to log in with the 2nd user", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[1].email,
-				password: users[1].password,
-			}
+		it("Fail to log in with an unknown email and unknown password", async function () {
+			const res = await logReq("this_email@doesnt.exist",  "this_password_doesnt_exist")
+			expect(res.statusCode).to.equals(401);
 		});
 
-		const body = response.json();
-
-		expect(response.statusCode).to.equals(200);
-		expect(body.token).to.be.a("string");
-		token = body.token;
-	});
-
-	it ("Fails to get current authenticated user because of wrong jwt token", async function() {
-		const response = await server.inject({
-			method: "GET",
-			url: "/auth",
-			headers: {
-				["Authorization"]: "Bearer abcd"
-			}
+		it("Succeed to log in", async function () {
+			const res = await logReq(users[0].email, users[0].password)
+			expect(res.statusCode).to.equals(200);
 		});
 
-		expect(response.statusCode).to.equals(401);
-	});
+		it ("Succeed to get current authenticated user", async function() {
+			const resLogin = await logReq(users[0].email, users[0].password)
+			expect(resLogin.statusCode).to.equals(200);
 
-	it ("Succeed to get current authenticated user", async function() {
-		const response = await server.inject({
-			method: "GET",
-			url: "/auth",
-			headers: {
-				["Authorization"]: `Bearer ${token}`
-			}
+			const token = resLogin.json().token
+
+			const resAuth = await server.inject({
+				method: "GET",
+				url: "/auth",
+				headers: {
+					["Authorization"]: `Bearer ${token}`
+				}
+			});
+			expect(resAuth.statusCode).to.equals(200);
 		});
-
-		expect(response.statusCode).to.equals(200);
-	});
-
-	it("Should fail to log in with password of another user", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[1].email,
-				password: users[0].password,
-			}
-		});
-
-		expect(response.statusCode).to.equals(401);
-	});
-
-	it("Should fail to log in with a total random password", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: users[1].email,
-				password: "qwertyasdfgzxcvb",
-			}
-		});
-
-		expect(response.statusCode).to.equals(401);
-	});
-
-	it("Should fail to log in with an unknown email but existing password", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: "this_email@doesnt.exist",
-				password: users[0].password,
-			}
-		});
-
-		expect(response.statusCode).to.equals(401);
-	});
-
-	it("Should fail to log in with an unknown email and unknown password", async function () {
-
-		const response = await server.inject({
-			method: "POST",
-			url: "/login",
-			payload: {
-				email: "this_email@doesnt.exist",
-				password: "this_password_doesnt_exist",
-			}
-		});
-
-		expect(response.statusCode).to.equals(401);
-	});
+	})
 });
