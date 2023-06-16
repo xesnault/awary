@@ -32,7 +32,7 @@ export function usersRoutes(app: App) {
 
 				const token = server.jwt.sign({email});
 
-				return {...user.getState(), token};
+				return {...user.getState(), password: undefined, token};
 			}
 		);
 
@@ -64,7 +64,7 @@ export function usersRoutes(app: App) {
 			},
 			async function (request) {
 				const {caller} = request.data;
-				return caller.asUser().getState(); 
+				return {...caller.asUser().getState(), password: undefined}; 
 			}
 		);
 

@@ -210,6 +210,8 @@ describe("Users", function () {
 		it("Succeed to log in", async function () {
 			const res = await logReq(users[0].email, users[0].password)
 			expect(res.statusCode).to.equals(200);
+			expect(res.json().token).to.not.be.undefined;
+			expect(res.json().password).to.be.undefined;
 		});
 
 		it ("Succeed to get current authenticated user", async function() {
@@ -226,6 +228,7 @@ describe("Users", function () {
 				}
 			});
 			expect(resAuth.statusCode).to.equals(200);
+			expect(resAuth.json().password).to.be.undefined;
 		});
 	})
 });
