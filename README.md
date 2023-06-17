@@ -1,8 +1,20 @@
 **This software is under development and not stable**
   
-Awary allows you to register events and metrics.
-
+Awary is a simple software that allows you to **store** data in the form of a **log** or **metric**
+using HTTP requests, there is no processing of these data.  
+  
 ![image](https://github.com/xesnault/awary/assets/22960612/407fb5f0-38f3-4775-8a4a-3deaf203c8d4)
+
+Documentation is available at [docs.awary.app](https://docs.awary.app) and in the /docs directory as
+markdown files.
+
+## Features
+
+- Add logs and update metrics with a simple HTTP request.
+- Logs support tags.
+- Each metric update is kept in an history.
+- Customize your dashboard with charts or simple numbers.
+- Multiple API keys per project.
 
 ## Quickstart
 
