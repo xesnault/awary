@@ -1,9 +1,9 @@
-import { LogFeature } from "../logs";
+import {LogFeature} from "../logs";
 import {MetricFeature} from "../metrics";
 import {ProjectFeature} from "../projects";
 import {Caller, SystemCaller} from "../projects/entities/Caller";
-import { UserFeature } from "../users";
-import { AuthenticationFailed } from "../users/exceptions/AuthenticationFailed";
+import {UserFeature} from "../users";
+import {AuthenticationFailed} from "../users/exceptions/AuthenticationFailed";
 
 interface ServerAdminDependencies {
 	userFeature: UserFeature

@@ -1,8 +1,8 @@
 import {LimitReached} from "@app/core/exceptions/LimitReached";
 import {User} from "@app/core/features/users/entities/User";
-import { randomBytes } from "crypto";
+import {randomBytes} from "crypto";
 import {getAccountProjectsLimit} from "../users/utils";
-import { ApiKeyRepository } from "./ApiKeyRepository";
+import {ApiKeyRepository} from "./ApiKeyRepository";
 import {ApiKey, Caller, Project} from "./entities";
 import {MissingResource} from "./exceptions/MissingResource";
 import {ProjectAuthorization, ProjectContext} from "./ProjectContext";

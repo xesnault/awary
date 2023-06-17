@@ -1,4 +1,4 @@
-import { Feature, AppServices } from "@app/core/Feature";
+import {Feature, AppServices} from "@app/core/Feature";
 import {MetricFeature} from "../metrics";
 import {ViewsRepository} from "./ViewsRepository";
 import {ViewsUseCases} from "./ViewsUseCases";

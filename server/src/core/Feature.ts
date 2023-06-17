@@ -1,5 +1,5 @@
-import { Db } from "mongodb";
-import { UserFeature } from "./features/users";
+import {Db} from "mongodb";
+import {UserFeature} from "./features/users";
 
 export type AppServices = {
 	db: Db

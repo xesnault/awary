@@ -7,14 +7,10 @@ describe("Metrics", function () {
 
 	let server: HttpServer;
 	let users: TestUser[];
-	let project1: any
+	let project1: Record<string, unknown>
 	let project1ApiKey1: TestApiKey
-	let project1ApiKey2: TestApiKey
 
-	let project2: any
-	let project2ApiKey1: TestApiKey
-
-	let metric1: any
+	let project2: Record<string, unknown>
 
 	beforeEach(async function () {
 		// Setup the server and app
@@ -61,7 +57,7 @@ describe("Metrics", function () {
 		expect(response.body[1].key).to.not.be.undefined
 
 		project1ApiKey1 = new TestApiKey(server.server, response.body[0].key)
-		project1ApiKey2 = new TestApiKey(server.server, response.body[1].key)
+		new TestApiKey(server.server, response.body[1].key)
 
 		response = await users[0].Get(`/projects/${project2.id}/apiKeys`);
 		expect(response.statusCode).to.equals(200);
@@ -70,8 +66,6 @@ describe("Metrics", function () {
 		expect(response.body[0].name).to.equals("key3")
 		expect(response.body[0].projectId).to.equals(project2.id)
 		expect(response.body[0].key).to.not.be.undefined
-
-		project2ApiKey1 = new TestApiKey(server.server, response.body[0].key)
 	});
 
 	it ("Return empty metric list", async function() {
@@ -106,7 +100,6 @@ describe("Metrics", function () {
 		expect(resGet.statusCode).to.equals(200);
 		expect(resGet.body).to.be.a("array");
 		expect(resGet.body).to.have.length(1);
-		metric1 = resGet.body[0];
 	});
 
 	it ("Get metrics with [Api Key 1]", async function() {

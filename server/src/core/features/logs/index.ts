@@ -1,9 +1,9 @@
-import { Feature, AppServices } from "@app/core/Feature";
-import { ProjectFeature } from "../projects";
-import { UserFeature } from "../users";
-import { LogsRepository } from "./LogsRepository";
-import { LogsUseCases } from "./LogsUseCases";
-import { TagsRepository } from "./TagsRepository";
+import {Feature, AppServices} from "@app/core/Feature";
+import {ProjectFeature} from "../projects";
+import {UserFeature} from "../users";
+import {LogsRepository} from "./LogsRepository";
+import {LogsUseCases} from "./LogsUseCases";
+import {TagsRepository} from "./TagsRepository";
 
 export type LogFeatureDependencies = {
 	userFeature: UserFeature

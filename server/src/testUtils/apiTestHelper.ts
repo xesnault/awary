@@ -52,6 +52,7 @@ export async function buildTestServer(): Promise<HttpServer> {
 
 export interface ResponseHelper {
 	response: LightMyRequestResponse,
+	/* eslint-disable-next-line */
 	body: any,
 	statusCode: number
 }
@@ -78,7 +79,7 @@ export class TestApiKey {
 		return {response, body: response.json(), statusCode: response.statusCode};
 	}
 
-	async Post(url: string, payload: any): Promise<ResponseHelper> {
+	async Post(url: string, payload: Record<string, unknown>): Promise<ResponseHelper> {
 		const response = await this._server.inject({
 			method: "POST",
 			url,
@@ -90,7 +91,7 @@ export class TestApiKey {
 		return {response, body: response.json(), statusCode: response.statusCode};
 	}
 
-	async Put(url: string, payload: any): Promise<ResponseHelper> {
+	async Put(url: string, payload: Record<string, unknown>): Promise<ResponseHelper> {
 		const response = await this._server.inject({
 			method: "PUT",
 			url,
@@ -180,7 +181,7 @@ export class TestUser {
 		return {response, body: response.json(), statusCode: response.statusCode};
 	}
 
-	async Post(url: string, payload: any): Promise<ResponseHelper> {
+	async Post(url: string, payload: Record<string, unknown>): Promise<ResponseHelper> {
 		const response = await this._server.inject({
 			method: "POST",
 			url,
@@ -192,7 +193,7 @@ export class TestUser {
 		return {response, body: response.json(), statusCode: response.statusCode};
 	}
 
-	async Put(url: string, payload: any): Promise<ResponseHelper> {
+	async Put(url: string, payload: Record<string, unknown>): Promise<ResponseHelper> {
 		const response = await this._server.inject({
 			method: "PUT",
 			url,
@@ -225,7 +226,7 @@ export async function setupNewUsers(server: FastifyTypebox): Promise<TestUser[]>
 	return usersWithAuthorization;
 }
 
-export async function TestRequiredBody(method: string, url: string, user: TestUser, originalPayload: any) {
+export async function TestRequiredBody(method: string, url: string, user: TestUser, originalPayload: Record<string, unknown>) {
 	const payloadKeys = Object.keys(originalPayload);
 
 	for (const key of payloadKeys) {

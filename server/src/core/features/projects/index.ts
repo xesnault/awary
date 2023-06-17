@@ -1,9 +1,9 @@
-import { Feature, AppServices } from "@app/core/Feature";
-import { UserFeature } from "../users";
-import { ApiKeyRepository } from "./ApiKeyRepository";
+import {Feature, AppServices} from "@app/core/Feature";
+import {UserFeature} from "../users";
+import {ApiKeyRepository} from "./ApiKeyRepository";
 import {ProjectEvents} from "./ProjectsEvents";
-import { ProjectsRepository } from "./ProjectsRepository";
-import { ProjectsUseCases } from "./ProjectsUseCases";
+import {ProjectsRepository} from "./ProjectsRepository";
+import {ProjectsUseCases} from "./ProjectsUseCases";
 
 export type ProjectFeatureDependencies = {
 	userFeature: UserFeature

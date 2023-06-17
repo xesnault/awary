@@ -25,7 +25,7 @@ export function usersRoutes(app: App) {
 			{
 				schema: {body: LoginBody}
 			},
-			async (request, reply) => {
+			async (request) => {
 				const {email, password} = request.body;
 				const user = await usersUseCases.logUser(email, password)
 
@@ -51,7 +51,7 @@ export function usersRoutes(app: App) {
 				schema: {body: InfoBody},
 				preValidation: [rateLimit(1, 1000)],
 			},
-			async (request, reply) => {
+			async (request) => {
 				const {adminToken} = request.body;
 				return usersUseCases.getGlobalInfo(adminToken)
 			}
@@ -67,7 +67,7 @@ export function usersRoutes(app: App) {
 			}
 		);
 
-		server.get("/isUserRegistrationEnabled", async function (request) {
+		server.get("/isUserRegistrationEnabled", async function () {
 			return {enabled: isRegistrationEnabled()};
 		});
 	}

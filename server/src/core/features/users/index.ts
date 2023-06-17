@@ -1,7 +1,7 @@
-import { Feature, AppServices } from "@app/core/Feature";
-import { UserEvents } from "./UsersEvents";
-import { UsersRepository } from "./UsersRepository";
-import { UsersUseCases } from "./UsersUseCases";
+import {Feature, AppServices} from "@app/core/Feature";
+import {UserEvents} from "./UsersEvents";
+import {UsersRepository} from "./UsersRepository";
+import {UsersUseCases} from "./UsersUseCases";
 
 export class UserFeature extends Feature {
 
@@ -10,7 +10,7 @@ export class UserFeature extends Feature {
 	useCases: UsersUseCases
 	events: UserEvents
 
-	constructor(services: AppServices, features: object) {
+	constructor(services: AppServices) {
 		super(services);
 		this.repository = new UsersRepository(services.db)
 		this.events = new UserEvents()

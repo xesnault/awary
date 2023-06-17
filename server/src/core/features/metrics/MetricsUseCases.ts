@@ -1,9 +1,9 @@
 import {LimitReached} from "@app/core/exceptions/LimitReached";
 import {MissingResource} from "../projects/exceptions/MissingResource";
 import {ProjectAuthorization, ProjectContext} from "../projects/ProjectContext";
-import { ProjectsUseCases } from "../projects/ProjectsUseCases";
+import {ProjectsUseCases} from "../projects/ProjectsUseCases";
 import {getMetricsHistoryLimit} from "../users/utils";
-import {Metric, MetricCreationProperties, MetricValue} from "./entities";
+import {Metric, MetricCreationProperties} from "./entities";
 import {MetricEvents} from "./MetricsEvents";
 import {MetricsRepository} from "./MetricsRepository";
 

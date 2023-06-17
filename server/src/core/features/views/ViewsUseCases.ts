@@ -27,7 +27,7 @@ export class ViewsUseCases {
 
 	async createView(context: ProjectContext, viewData: ViewCreationProperties): Promise<View> {
 		context.enforceAuthorizations([ProjectAuthorization.Write])
-		const {project, caller} = context;
+		const {project} = context;
 		
 		const view = await this._viewsRepository.createView({
 			projectId: project.id,

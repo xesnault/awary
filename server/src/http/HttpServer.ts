@@ -1,8 +1,7 @@
 import fastifyCors from "@fastify/cors";
 import fastifyJwt from "@fastify/jwt";
-import { TypeBoxTypeProvider } from "@fastify/type-provider-typebox";
+import {TypeBoxTypeProvider} from "@fastify/type-provider-typebox";
 import {App} from "@app/core";
-import {ApiKey} from "@app/core/features/projects/entities/ApiKey";
 import {Caller} from "@app/core/features/projects/entities/Caller";
 import {Project} from "@app/core/features/projects/entities/Project";
 import {MissingAuthorization} from "@app/core/features/projects/exceptions/MissingAuthorization";
@@ -11,12 +10,12 @@ import {ProjectContext} from "@app/core/features/projects/ProjectContext";
 import {User} from "@app/core/features/users/entities/User";
 import {AuthenticationFailed} from "@app/core/features/users/exceptions/AuthenticationFailed";
 import {SignupFailed, SignupFailedCode} from "@app/core/features/users/exceptions/SignupFailed";
-import fastify, { FastifyInstance, FastifyLoggerInstance, FastifyReply, FastifyRequest, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerDefault } from "fastify";
-import { Logger } from "utils/logger";
+import fastify, {FastifyInstance, FastifyLoggerInstance, InjectOptions, RawReplyDefaultExpression, RawRequestDefaultExpression, RawServerDefault} from "fastify";
+import {Logger} from "utils/logger";
 import {projectsRoutes, usersRoutes, logsRoutes, metricsRoutes} from "./routes";
 import {viewsRoutes} from "./routes/views.routes";
 import {LimitReached} from "@app/core/exceptions/LimitReached";
-import { adminRoutes } from "./routes/admin.routes";
+import {adminRoutes} from "./routes/admin.routes";
 
 export type FastifyTypebox = FastifyInstance<
   RawServerDefault,
@@ -34,10 +33,6 @@ declare module "@fastify/jwt" {
 }
 
 declare module "fastify" {
-	interface FastifyInstance {
-		authenticate: (request: FastifyRequest, reply: FastifyReply) => any
-	}
-
 	interface FastifyRequest { 
 		data: { // [TODO] This file shouldn't know about these classes
 			user: User		
@@ -75,7 +70,7 @@ export class HttpServer {
 		});
 	}
 
-	async inject(data: any) {
+	async inject(data: InjectOptions) {
 		return this.server.inject(data);
 	}
 
@@ -85,7 +80,7 @@ export class HttpServer {
 		}
 	
 		await this.server.register(fastifyCors);
-		await this.server.register(fastifyJwt, { secret: process.env.JWT_SECRET });
+		await this.server.register(fastifyJwt, {secret: process.env.JWT_SECRET});
 	
 		this.server.addHook("onSend", (req, reply, payload, done) => {
 	

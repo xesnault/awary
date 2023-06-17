@@ -1,5 +1,5 @@
 import {UserData} from "./entities/UserData";
-import {Collection, Db, ObjectId } from "mongodb";
+import {Collection, Db, ObjectId} from "mongodb";
 
 export class UsersRepository {
 

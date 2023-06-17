@@ -2,8 +2,8 @@ import {FastifyInstance} from "fastify";
 import {Static} from "@sinclair/typebox";
 import {App} from "@app/core";
 import {SetMetricValueBody, SetMetricValueParams, CreateMetricBody, CreateMetricParams, UpdateMetricBody, UpdateMetricParams, DeleteHistoryRecordParams} from "./metrics.def";
-import { ProjectsUseCases } from "@app/core/features/projects/ProjectsUseCases";
-import { UsersUseCases } from "@app/core/features/users/UsersUseCases";
+import {ProjectsUseCases} from "@app/core/features/projects/ProjectsUseCases";
+import {UsersUseCases} from "@app/core/features/users/UsersUseCases";
 import {AppData, rateLimit, withData} from "http/utils";
 import {MetricsUseCases} from "@app/core/features/metrics";
 

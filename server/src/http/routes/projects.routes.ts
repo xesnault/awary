@@ -7,7 +7,6 @@ import {ProjectAuthorization} from "@app/core/features/projects/ProjectContext";
 
 export function projectsRoutes(app: App) {
 	const projectService = app.projectFeature.service
-	const userService = app.projectFeature.service
 
 	return async (server: FastifyInstance) => {
 		server.post<{Body: Static<typeof CreateProjectBody>}>("/projects",
@@ -52,7 +51,7 @@ export function projectsRoutes(app: App) {
 			{
 				preValidation: [withData(app, [AppData.Context])]
 			},
-			async function (request, reply) {
+			async function (request) {
 				const {context} = request.data;
 				const apiKeys = projectService.getApiKeysOfProject(context);
 				return apiKeys

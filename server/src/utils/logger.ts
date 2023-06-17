@@ -14,28 +14,28 @@ export class Logger {
 		console.log(message);
 	}
 
-	static debug(message: any) {
+	static debug(message: unknown) {
 		if (!process.env.LOGGER_ENABLED) {
 			return;
 		}
 		console.log(`${consoleColors.DEBUG}${message}${consoleColors.RESET}`);
 	}
 
-	static success(message: any) {
+	static success(message: unknown) {
 		if (!process.env.LOGGER_ENABLED) {
 			return;
 		}
 		console.error(`${consoleColors.SUCCESS}${message}${consoleColors.RESET}`);
 	}
 
-	static warn(message: any) {
+	static warn(message: unknown) {
 		if (!process.env.LOGGER_ENABLED) {
 			return;
 		}
 		console.error(`${consoleColors.WARNING}${message}${consoleColors.RESET}`);
 	}
 
-	static error(message: any) {
+	static error(message: unknown) {
 		if (!process.env.LOGGER_ENABLED) {
 			return;
 		}

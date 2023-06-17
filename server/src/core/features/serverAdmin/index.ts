@@ -1,9 +1,9 @@
-import { Feature, AppServices } from "@app/core/Feature";
+import {Feature, AppServices} from "@app/core/Feature";
 import {LogFeature} from "../logs";
 import {MetricFeature} from "../metrics";
-import { ProjectFeature } from "../projects";
-import { UserFeature } from "../users";
-import { ServerAdminUseCases } from "./ServerAdminUseCases";
+import {ProjectFeature} from "../projects";
+import {UserFeature} from "../users";
+import {ServerAdminUseCases} from "./ServerAdminUseCases";
 
 export type ServerAdminFeatureDependencies = {
 	userFeature: UserFeature

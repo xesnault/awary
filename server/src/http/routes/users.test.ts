@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import { LightMyRequestResponse } from "fastify";
+import {LightMyRequestResponse} from "fastify";
 import {HttpServer} from "http/HttpServer";
 import {buildTestServer, deleteDatabase} from "testUtils/apiTestHelper";
 
@@ -18,7 +18,13 @@ const users = [
 	}
 ];
 
-async function TestRequiredBody(server: HttpServer, OriginalRequest: any) {
+type TestRequestBody = {
+	method: string,
+	url: string,
+	payload: Record<string, unknown>
+}
+
+async function TestRequiredBody(server: HttpServer, OriginalRequest: TestRequestBody) {
 	const payloadKeys = Object.keys(OriginalRequest.payload);
 
 	for (const key of payloadKeys) {

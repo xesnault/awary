@@ -1,7 +1,7 @@
 import {Collection, Db, ObjectId} from "mongodb";
-import { ApiKey } from "./entities/ApiKey";
-import { ApiKeyData } from "./entities/ApiKeyData";
-import { Project } from "./entities/Project";
+import {ApiKey} from "./entities/ApiKey";
+import {ApiKeyData} from "./entities/ApiKeyData";
+import {Project} from "./entities/Project";
 
 export class ApiKeyRepository {
 

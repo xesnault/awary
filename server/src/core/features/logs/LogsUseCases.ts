@@ -1,9 +1,9 @@
 import {MissingResource} from "../projects/exceptions/MissingResource";
 import {ProjectAuthorization, ProjectContext} from "../projects/ProjectContext";
-import { ProjectsUseCases } from "../projects/ProjectsUseCases";
-import { Log, LogDataOnCreation, Tag, TagOnCreation } from "./entities";
-import { LogsRepository } from "./LogsRepository";
-import { TagsRepository } from "./TagsRepository";
+import {ProjectsUseCases} from "../projects/ProjectsUseCases";
+import {Log, LogDataOnCreation, Tag, TagOnCreation} from "./entities";
+import {LogsRepository} from "./LogsRepository";
+import {TagsRepository} from "./TagsRepository";
 
 interface LogServiceDependencies {
 	projectService: ProjectsUseCases,

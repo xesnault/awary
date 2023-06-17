@@ -1,6 +1,6 @@
 import {Collection, Db, ObjectId, WithId} from "mongodb";
-import { Project } from "../projects/entities/Project";
-import { Tag, TagOnCreation } from "./entities";
+import {Project} from "../projects/entities/Project";
+import {Tag, TagOnCreation} from "./entities";
 
 export interface TagDocument {
 	projectId: ObjectId

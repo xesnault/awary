@@ -7,8 +7,7 @@ describe("Admin", function () {
 
 	let server: HttpServer;
 	let users: TestUser[];
-	let project1Id: any
-	let project2Id: any
+	let project1Id: string
 
 	beforeEach(async function () {
 		await deleteDatabase();
@@ -42,9 +41,8 @@ describe("Admin", function () {
 			// Create basic projects
 			const resAddProject1 = await users[0].Post("/projects", {name: "p1"});
 			await users[0].Post("/projects", {name: "p2"}); // Yep, don't need all projects
-			const resAddProject2 = await users[1].Post("/projects", {name: "p3"});
+			await users[1].Post("/projects", {name: "p3"});
 			project1Id = resAddProject1.body.id;
-			project2Id = resAddProject2.body.id;
 		});
 
 		it ("Return 3 projects, 3 users, 3 logs, 0 metrics", async function() {

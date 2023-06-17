@@ -4,8 +4,8 @@ import argon2 from "argon2";
 import {AuthenticationFailed} from "./exceptions/AuthenticationFailed";
 import {getAccountCreationLimit, isRegistrationEnabled} from "./utils";
 import {SignupFailed, SignupFailedCode} from "./exceptions/SignupFailed";
-import { UserEvents } from "./UsersEvents";
-import { Caller, SystemCaller } from "../projects/entities/Caller";
+import {UserEvents} from "./UsersEvents";
+import {Caller, SystemCaller} from "../projects/entities/Caller";
 
 interface UsersUseCasesDependencies {
 	repository: UsersRepository,

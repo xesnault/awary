@@ -4,11 +4,8 @@ import {Project} from "@app/core/features/projects/entities/Project";
 import {ProjectContext} from "@app/core/features/projects/ProjectContext";
 import {User} from "@app/core/features/users/entities";
 import {AuthenticationFailed} from "@app/core/features/users/exceptions/AuthenticationFailed";
-import { ADMIN_TOKEN } from "@app/utils";
+import {ADMIN_TOKEN} from "@app/utils";
 import {FastifyReply, FastifyRequest} from "fastify";
-import {Logger} from "utils/logger";
-
-
 
 export function rateLimit(count: number, ms: number) {
 	let rateLimitCache: { [callerId: string]: { [url: string]: number } } = {}
@@ -49,7 +46,7 @@ export function withData(app: App, required: AppData[]) {
 	const projectRepository = app.projectFeature.projectRepository
 	const userRepository = app.userFeature.repository
 	const apiKeyRepository = app.projectFeature.apiKeyRepository
-	return async (request: FastifyRequest, reply: FastifyReply) => {
+	return async (request: FastifyRequest) => {
 		let user
 		let caller
 		let project
@@ -84,7 +81,7 @@ export function withData(app: App, required: AppData[]) {
 		}
 
 		if (required.includes(AppData.Project) || required.includes(AppData.Context)) {
-			const params = request.params as any
+			const params = request.params as Record<string, unknown>
 			const projectId = params.projectId as string
 			project = await projectRepository.findProjectById(projectId);
 			if (!project) {

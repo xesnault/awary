@@ -1,8 +1,8 @@
-import { Feature, AppServices } from "@app/core/Feature";
-import { ProjectFeature } from "../projects";
-import { UserFeature } from "../users";
+import {Feature, AppServices} from "@app/core/Feature";
+import {ProjectFeature} from "../projects";
+import {UserFeature} from "../users";
 import {MetricEvents} from "./MetricsEvents";
-import { MetricsRepository } from "./MetricsRepository";
+import {MetricsRepository} from "./MetricsRepository";
 import {MetricsUseCases} from "./MetricsUseCases";
 
 export * from "./MetricsUseCases"

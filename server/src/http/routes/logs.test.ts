@@ -6,11 +6,10 @@ describe("Logs", function () {
 
 	let server: HttpServer;
 	let users: TestUser[];
-	let project1: any
+	let project1: Record<string, unknown>
 	let project1ApiKey1: TestApiKey
-	let project1ApiKey2: TestApiKey
 
-	let project2: any
+	let project2: Record<string, unknown>
 	let project2ApiKey1: TestApiKey
 
 	beforeEach(async function () {
@@ -58,7 +57,7 @@ describe("Logs", function () {
 		expect(response.body[1].key).to.not.be.undefined
 
 		project1ApiKey1 = new TestApiKey(server.server, response.body[0].key)
-		project1ApiKey2 = new TestApiKey(server.server, response.body[1].key)
+		new TestApiKey(server.server, response.body[1].key)
 
 		response = await users[0].Get(`/projects/${project2.id}/apiKeys`);
 		expect(response.statusCode).to.equals(200);

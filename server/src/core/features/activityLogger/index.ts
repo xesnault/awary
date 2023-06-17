@@ -1,9 +1,8 @@
-import { Feature, AppServices } from "@app/core/Feature";
-import { Logger } from "utils/logger";
+import {Feature, AppServices} from "@app/core/Feature";
 import {LogFeature} from "../logs";
 import {MetricFeature} from "../metrics";
-import { ProjectFeature } from "../projects";
-import { UserFeature } from "../users";
+import {ProjectFeature} from "../projects";
+import {UserFeature} from "../users";
 import {ActivityLoggerService} from "./ActivityLogger";
 
 export type ActivityLoggerFeatureDependencies = {

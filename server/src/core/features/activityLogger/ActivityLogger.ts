@@ -1,4 +1,4 @@
-import { getAdminProjectId, getAdminSucessTagId } from "@app/utils";
+import {getAdminProjectId, getAdminSucessTagId} from "@app/utils";
 import {LogsUseCases} from "../logs/LogsUseCases";
 import {MetricFeature} from "../metrics";
 import {onMetricCreatedData} from "../metrics/MetricsEvents";
@@ -6,8 +6,8 @@ import {ProjectFeature} from "../projects";
 import {Caller, SystemCaller} from "../projects/entities/Caller";
 import {ProjectContext} from "../projects/ProjectContext";
 import {onProjectCreatedData} from "../projects/ProjectsEvents";
-import { UserFeature } from "../users";
-import { onUserCreatedData } from "../users/UsersEvents";
+import {UserFeature} from "../users";
+import {onUserCreatedData} from "../users/UsersEvents";
 
 interface ActivityLoggerDependencies {
 	userFeature: UserFeature
