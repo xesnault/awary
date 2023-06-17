@@ -45,7 +45,7 @@ Response body example:
 {
 	"id": "647a148a4f68451001cec326",
 	"projectId": "647a146d4f68451001cec323",
-	"name": "aasd4",
+	"name": "My metric name",
 	"history": [
 		{
 			"id": "647a148e4f68451001cec328",
@@ -72,7 +72,7 @@ Response body example:
 	{
 		"id": "647a148a4f68451001cec326",
 		"projectId": "647a146d4f68451001cec323",
-		"name": "aasd4",
+		"name": "My metric name",
 		"history": [
 			{
 				"id": "647a148e4f68451001cec328",
