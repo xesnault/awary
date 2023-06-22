@@ -1,16 +1,18 @@
-import {CogIcon, DocumentIcon, DocumentReportIcon, DocumentSearchIcon, PlusIcon, TrashIcon, ViewListIcon} from "@heroicons/react/outline";
+import {ClipboardCopyIcon, CogIcon, DocumentIcon, DocumentReportIcon, DocumentSearchIcon, PlusIcon, TrashIcon, ViewListIcon} from "@heroicons/react/outline";
 import {useCallback, useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {useApi} from "../api";
 import Button from "../components/Button";
 import {LogCard} from "../components/LogCard";
+import ProjectHeader from "../components/ProjectHeader";
 import {ProjectSideBar} from "../components/ProjectSideBar";
 import {Log} from "../core/Log";
 import {Metric, MetricDataOnUpdate} from "../core/Metric";
 import {Project} from "../core/Project";
 import {MetricForm} from "../forms/createMetricForm";
 import {useModal} from "../services/ModalService";
+import { copyToClipboard } from "../utils/copyToClipboard";
 import {formatTimestamp} from "../utils/formatTimestamp";
 import {AddSerieValueForm} from "./projectPage/forms/AddSeriesValueForm";
 
@@ -73,7 +75,16 @@ export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) 
 			<div className="flex-1 f-c">
 				<div className="f-r">
 					<div className="flex-1"></div>
-					<p className="flex-1 text-center text-xl font-bold">{metric.name}</p>
+					<div className="f-r gap-2 items-center">
+						<p className="flex-1 text-center text-xl font-bold">{metric.name}</p>
+						<ClipboardCopyIcon
+							className="w-4 h-4 cursor-pointer"
+							onClick={() => {
+								copyToClipboard(metric.id)
+								modalService.info("Metric id copied to clipboard")
+							}}
+						/>
+					</div>
 					<div className="flex-1 f-r gap-2 justify-end items-center">
 						<PlusIcon
 							className="w-4 h-4 text-green-300 hover:bg-neutral-500 cursor-pointer duration-75"
@@ -97,8 +108,6 @@ export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) 
 					</div>
 				</div>
 				<div className="f-c text-left p-2">
-					<span>Id: {metric.id}</span>
-					<span>Project id: {metric.projectId}</span>
 					<span>Last update: {formatTimestamp(metric.history?.at(0)?.date || 0)}</span>
 					<span>Last value: {metric.history?.at(0)?.value}</span>
 				</div>
@@ -146,10 +155,17 @@ export function ProjectMetricsPage() {
 
 	return (
 		<div className="flex-1 f-c gap-4 overflow-scroll">
-			<div className="f-r justify-between items-center border-b border-neutral-600 pb-4">
-				<h2 className="text-left text-3xl font-bold">Metrics</h2>
-				<Button text="Create new metric" onClick={() => modalService.addModal(metricForm)}/>
-			</div>
+			<ProjectHeader
+				project={project}
+				middle={<h3 className="text-xl">Metrics</h3>}
+				right={
+					<Button
+						className="ml-auto"
+						text="Create new metric"
+						onClick={() => modalService.addModal(metricForm)}
+					/>
+				}
+			/>
 			<div className={`grid grid-cols-2 rounded-md gap-2 overflow-scroll pr-2`}>
 				{metrics.map(metric => 
 					<MetricCard

@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useApi} from "../api";
 import Button from "../components/Button";
 import {LogCard} from "../components/LogCard";
+import ProjectHeader from "../components/ProjectHeader";
 import {ProjectSideBar} from "../components/ProjectSideBar";
 import {Log} from "../core/Log";
 import {Project} from "../core/Project";
@@ -65,13 +66,21 @@ export default function ProjectLogsPage() {
 
 	return (
 		<div className="flex-1 f-c gap-4">
-			<div className="f-r items-center justify-between pb-4 border-b border-neutral-600">
-				<h2 className="text-left text-3xl font-bold">Logs</h2>
-				<Button
-					text="Manage tags"
-					onClick={() => modalService.addModal((close) => <TagsSettings tags={tags} onSave={(data) => {updateTags(data);close()}}/>)}
-				/>
-			</div>
+			<ProjectHeader
+				project={project}
+				middle={<h3 className="text-xl">Logs</h3>}
+				right={
+					<Button
+						className="ml-auto"
+						text="Manage tags"
+						onClick={() => modalService.addModal(
+							(close) => <TagsSettings tags={tags} onSave={(data) => {
+								updateTags(data);close()
+							}}/>
+						)}
+					/>
+				}
+			/>
 			<div className={`flex flex-col rounded-md gap-2 overflow-scroll`}>
 				{logs.map(log => <LogCard key={log.id} project={project} log={log} onDelete={onLogDeleted}/>)}
 			</div>

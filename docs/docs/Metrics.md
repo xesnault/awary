@@ -14,8 +14,8 @@ own thing.
 You need 3 things to make an api call for a metric:
 
 - An API Key (check this to know how to generate one).
-- The project's `id`, you can find it on the "Metrics" page at the top.
-- The metric's `id`, you can find on the "Metrics" page.
+- The project's `id`, you can copy it by clicking on the clipboard icon next to the project's name.
+- The metric's `id`, you can copy it by clicking on the clipboard icon next to the metric's name.
 
 ### Updating a metric
 

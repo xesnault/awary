@@ -6,6 +6,7 @@ import {Api, ApiContext, useApi} from "../../api"
 import Button from "../../components/Button";
 import Card from "../../components/Card";
 import Chart from "../../components/Chart";
+import ProjectHeader from "../../components/ProjectHeader";
 import {ProjectSideBar } from "../../components/ProjectSideBar";
 import Select from "../../components/Select";
 import SideBar from "../../components/SideBar";
@@ -70,20 +71,25 @@ export default function ProjectPage() {
 	return (
 		<div className="flex-1 f-r h-full overflow-hidden">
 			<div className="flex-1 f-c gap-2 overflow-hidden">
-				<div className="f-r justify-center items-center gap-2 px-1">
-					<h2 className="text-xl">Dashboard</h2>
-					<CogIcon
-						className="w-4 h-4 cursor-pointer"
-						onClick={async () => {modalService.addModal((close) =>
-							<OrganizeDashboardForm
-								metrics={metrics}
-								dashboard={dashboardConfig}
-								close={close}
-								onSave={onSaveDashboard}
+				<ProjectHeader
+					project={project}
+					middle={
+						<div className="f-r justify-center items-center gap-2 px-1">
+							<h3 className="text-xl">Dashboard</h3>
+							<CogIcon
+								className="w-4 h-4 cursor-pointer"
+								onClick={async () => {modalService.addModal((close) =>
+									<OrganizeDashboardForm
+										metrics={metrics}
+										dashboard={dashboardConfig}
+										close={close}
+										onSave={onSaveDashboard}
+									/>
+								)}}
 							/>
-						)}}
-					/>
-				</div>
+						</div>
+					}
+				/>
 				<MetricsPanel metrics={metrics} dashboardConfig={dashboardConfig}/>
 				<div className="flex-1 f-r gap-2 overflow-hidden">
 					<LogsTab

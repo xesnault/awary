@@ -3,6 +3,7 @@ import {useParams} from "react-router-dom"
 import {useApi} from "../api"
 import Button from "../components/Button"
 import Card from "../components/Card"
+import ProjectHeader from "../components/ProjectHeader"
 import {ApiKey, ApiKeyData} from "../core/ApiKey"
 import {Project} from "../core/Project"
 import {useModal} from "../services/ModalService"
@@ -41,10 +42,18 @@ export function ProjectApiKeysPage() {
 
 	return (
 		<div className="f-c gap-4 overflow-scroll">
-			<h2 className="text-left text-3xl font-bold pb-4 border-b border-neutral-600">Api Keys</h2>
-			<Button
-				text="Generate API key"
-				onClick={() => {modalService.addModal((close) => <ApiKeyForm close={close} onCreate={generateApiKey}/>)}}
+			<ProjectHeader
+				project={project}
+				middle={<h3 className="text-xl">Api keys</h3>}
+				right={<Button
+					className="ml-auto"
+					text="Generate API key"
+					onClick={() => {
+						modalService.addModal((close) =>
+							<ApiKeyForm close={close} onCreate={generateApiKey}/>)
+						}	
+					}
+				/>}
 			/>
 			{
 				keys.map(key =>

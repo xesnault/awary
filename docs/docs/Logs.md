@@ -7,7 +7,7 @@ Logs are text with a date and tags associated with it.
 You need 2 things to make an api call to create a log:
 
 - An API Key (generate one from the "Api keys" tab on the left).
-- The project's `id`, you can find it the url after `projects/` (until I update the UI).
+- The project's `id`, you can copy it by clicking on the clipboard icon at the top of the page.
 
 ### Add a log
 
