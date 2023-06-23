@@ -1,10 +1,7 @@
-import {ChangeEvent, useCallback, useContext, useEffect, useState} from "react";
-import {SubmitHandler, useForm} from "react-hook-form";
-import {Link, Navigate, useNavigate} from "react-router-dom";
-import {Api, ApiContext, useApi} from "../api"
-import AppName from "../components/AppName";
+import {useCallback, useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {useApi} from "../api"
 import Button from "../components/Button";
-import LineEdit from "../components/Input";
 import {ProjectSideBar} from "../components/ProjectSideBar";
 import {Project} from "../core/Project";
 import {CreateProjectForm} from "../forms/createProjectForm";
@@ -14,8 +11,6 @@ export default function Projects() {
 	
 	const api = useApi();
 	const modalService = useModal();
-	const navigate = useNavigate()
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [projects, setProjects] = useState<Project[]>([]);
 
 	const fetchProjects = useCallback(async () => {

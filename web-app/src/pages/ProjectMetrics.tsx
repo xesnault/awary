@@ -1,13 +1,9 @@
-import {ClipboardCopyIcon, CogIcon, DocumentIcon, DocumentReportIcon, DocumentSearchIcon, PlusIcon, TrashIcon, ViewListIcon} from "@heroicons/react/outline";
+import {ClipboardCopyIcon, CogIcon, DocumentSearchIcon, PlusIcon, TrashIcon} from "@heroicons/react/outline";
 import {useCallback, useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {Link, useParams} from "react-router-dom";
 import {useApi} from "../api";
 import Button from "../components/Button";
-import {LogCard} from "../components/LogCard";
 import ProjectHeader from "../components/ProjectHeader";
-import {ProjectSideBar} from "../components/ProjectSideBar";
-import {Log} from "../core/Log";
 import {Metric, MetricDataOnUpdate} from "../core/Metric";
 import {Project} from "../core/Project";
 import {MetricForm} from "../forms/createMetricForm";
@@ -22,31 +18,9 @@ export type MetricCardProps = {
 	onAddDataPoint: () => void
 }
 
-//const dayDuration = 1000 * 60 * 60 * 24 // Duration of a day in milliseconds
-const dayDuration = 1000 * 60 * 60 * 24// Duration of a day in milliseconds
-
-function last30Days(data: {value: number | null, date: number}[]) {
-	data.sort((a, b) => b.date - a.date)
-	const processedData: {date: string, value: number | null}[] = []
-	const startingPoint = Date.now()
-
-	for (let currentDay = 0; currentDay < 60; ++currentDay) {
-		const beforeThreshold = startingPoint - (currentDay * dayDuration)
-		const last = data.find(x => x.date < beforeThreshold)
-		processedData.push({
-			date: formatTimestamp(beforeThreshold),
-			value: last && last.value !== null ? last.value : null
-		})
-	}
-
-	return processedData
-}
-
 export function MetricCard({metric, onDelete, onAddDataPoint}: MetricCardProps) {
 	const modalService = useModal();
 	const api = useApi()
-
-	const data = metric.history ? last30Days(metric.history).reverse() : []
 
 	const addDataPoint = async (value: number) => {
 		await api.addValueToSerie(metric.projectId, metric.id, value)
@@ -120,9 +94,7 @@ export function ProjectMetricsPage() {
 	
 	const api = useApi();
 	const modalService = useModal();
-	const navigate = useNavigate()
 	const {projectId} = useParams();
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [project, setProject] = useState<Project | null>(null);
 	const [metrics, setMetrics] = useState<Metric[]>([]);
 

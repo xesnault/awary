@@ -1,10 +1,9 @@
 import {useCallback, useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useApi} from "../api";
 import Button from "../components/Button";
 import {LogCard} from "../components/LogCard";
 import ProjectHeader from "../components/ProjectHeader";
-import {ProjectSideBar} from "../components/ProjectSideBar";
 import {Log} from "../core/Log";
 import {Project} from "../core/Project";
 import { Tag, TagData } from "../core/Tag";
@@ -15,9 +14,7 @@ export default function ProjectLogsPage() {
 	
 	const api = useApi();
 	const modalService = useModal();
-	const navigate = useNavigate()
 	const {projectId} = useParams();
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [project, setProject] = useState<Project | null>(null);
 	const [logs, setLogs] = useState<Log[]>([]);
 	const [tags, setTags] = useState<Tag[]>([]);

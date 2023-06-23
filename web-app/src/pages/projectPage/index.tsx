@@ -1,17 +1,10 @@
 import {CogIcon} from "@heroicons/react/outline";
-import {ChangeEvent, useCallback, useContext, useEffect, useState} from "react";
-import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
-import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
-import {Api, ApiContext, useApi} from "../../api"
-import Button from "../../components/Button";
+import {useCallback, useEffect, useState} from "react";
+import { useParams} from "react-router-dom";
+import {useApi} from "../../api"
 import Card from "../../components/Card";
 import Chart from "../../components/Chart";
 import ProjectHeader from "../../components/ProjectHeader";
-import {ProjectSideBar } from "../../components/ProjectSideBar";
-import Select from "../../components/Select";
-import SideBar from "../../components/SideBar";
-import Tabs from "../../components/Tabs";
-import {ApiKey} from "../../core/ApiKey";
 import {Log} from "../../core/Log";
 import {Metric} from "../../core/Metric";
 import {Project} from "../../core/Project";
@@ -20,19 +13,15 @@ import {useModal} from "../../services/ModalService";
 import {DashboardView, OrganizeDashboardForm} from "./forms/OrganizeDashboardForm";
 import LogsTab from "./LogsTab";
 import {MetricsPanel} from "./MetricsPanel";
-import SettingsTab from "./SettingsTab";
 
 export default function ProjectPage() {
 	
 	const api = useApi();
 	const modalService = useModal();
-	const navigate = useNavigate()
 	const {projectId} = useParams();
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [project, setProject] = useState<Project | null>(null);
 	const [logs, setLogs] = useState<Log[]>([]);
 	const [metrics, setMetrics] = useState<Metric[]>([]);
-	const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
 	const [dashboardConfig, setDashboardConfig] = useState<View<DashboardView> | null>(null)
 
 	const fetchProject = useCallback(async () => {
@@ -42,8 +31,6 @@ export default function ProjectPage() {
 		setLogs(logs);
 		const metrics = await api.fetchProjectMetrics(projectId as string);
 		setMetrics(metrics);
-		const apiKeys = await api.fetchProjectApiKeys(projectId as string);
-		setApiKeys(apiKeys);
 		const dashboardConfig = await api.fetchDashboardView(project.id)
 		setDashboardConfig(dashboardConfig)
 	}, [projectId, api])

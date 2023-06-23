@@ -4,10 +4,9 @@ import {useState} from "react";
 import {useApi} from "../api";
 import {Log} from "../core/Log";
 import {Project} from "../core/Project";
-import {TagSticker} from "../pages/projectPage/LogsTab";
+import {TagSticker} from "./TagSticker";
 import {useModal} from "../services/ModalService";
 import {formatTimestamp} from "../utils/formatTimestamp";
-import Card from "./Card";
 
 export type LogCardProps = {
 	project: Project

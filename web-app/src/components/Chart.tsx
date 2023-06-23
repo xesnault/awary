@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useState } from "react";
 import {Bar, ComposedChart} from "recharts";
-import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {Line, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
 import {formatTimestamp} from "../utils/formatTimestamp";
 import Select from "./Select";
 

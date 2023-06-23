@@ -1,8 +1,7 @@
 import {SubmitHandler, useForm} from "react-hook-form"
 import Button from "../components/Button";
 import LineEdit from "../components/Input";
-import {Metric, MetricData, MetricDataOnUpdate} from "../core/Metric";
-import {ProjectData} from "../core/Project"
+import {Metric, MetricDataOnUpdate} from "../core/Metric";
 
 interface CreateProjectFormProps {
 	metric?: Metric // If provided, we're on an update, otherwise it's a creation.

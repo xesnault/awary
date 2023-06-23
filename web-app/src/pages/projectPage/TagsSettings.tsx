@@ -1,14 +1,11 @@
-import { TrashIcon } from "@heroicons/react/outline"
+import {TrashIcon} from "@heroicons/react/outline"
 import {useState} from "react"
-import {useApi} from "../../api"
 import Button from "../../components/Button"
 import Card from "../../components/Card"
 import LineEdit from "../../components/Input"
-import {Project} from "../../core/Project"
-import {Tag, TagData} from "../../core/Tag"
+import {TagData} from "../../core/Tag"
 import {useModal} from "../../services/ModalService"
 import {TagForm} from "./forms/TagForm"
-import {TagSticker} from "./LogsTab"
 
 function clone<T>(x: T): T {
 	return JSON.parse(JSON.stringify(x))
@@ -20,7 +17,6 @@ interface TagsSettingsProps {
 }
 
 export function TagsSettings({tags: originalTags, onSave}: TagsSettingsProps) {
-	const api = useApi()
 	const modalService = useModal()
 
 	const [tags, setTags] = useState(originalTags)

@@ -1,4 +1,4 @@
-import { ArrowCircleLeftIcon, ClipboardCopyIcon } from "@heroicons/react/outline";
+import { ClipboardCopyIcon } from "@heroicons/react/outline";
 import { Project } from "../core/Project";
 import { useModal } from "../services/ModalService";
 import { copyToClipboard } from "../utils/copyToClipboard";

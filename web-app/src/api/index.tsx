@@ -1,7 +1,7 @@
 import React, {createContext, useContext} from "react";
 import {ApiKey, ApiKeyData} from "../core/ApiKey";
 import {Log, LogData} from "../core/Log";
-import {Metric, MetricData, MetricDataOnCreation, MetricDataOnUpdate} from "../core/Metric";
+import {Metric, MetricData, MetricDataOnUpdate} from "../core/Metric";
 import {Project, ProjectData} from "../core/Project";
 import { Tag, TagData } from "../core/Tag";
 import {View, ViewDataOnCreation, ViewDataOnUpdate} from "../core/View";

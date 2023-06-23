@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Route, Routes, useNavigate, useParams} from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import {useApi} from "../api";
 import {Project} from "../core/Project";
 import { MetricHistoryPage } from "../pages/MetricHistory";
@@ -7,16 +7,12 @@ import {ProjectApiKeysPage} from "../pages/ProjectApiKeys";
 import ProjectLogsPage from "../pages/ProjectLogs";
 import {ProjectMetricsPage} from "../pages/ProjectMetrics";
 import ProjectPage from "../pages/projectPage";
-import {useModal} from "../services/ModalService";
 import {ProjectSideBar} from "./ProjectSideBar";
 
 export default function ProjectPageBase() {
 	
 	const api = useApi();
-	const modalService = useModal();
-	const navigate = useNavigate()
 	const {projectId} = useParams();
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [project, setProject] = useState<Project | null>(null);
 
 	const fetchProject = useCallback(async () => {

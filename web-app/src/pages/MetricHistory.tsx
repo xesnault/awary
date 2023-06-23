@@ -1,26 +1,19 @@
-import {CogIcon, DocumentIcon, DocumentReportIcon, DocumentSearchIcon, PlusIcon, TrashIcon, ViewListIcon} from "@heroicons/react/outline";
+import {TrashIcon} from "@heroicons/react/outline";
 import {useCallback, useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {useParams} from "react-router-dom";
 import {useApi} from "../api";
 import Button from "../components/Button";
-import {LogCard} from "../components/LogCard";
-import {ProjectSideBar} from "../components/ProjectSideBar";
-import {Log} from "../core/Log";
-import {Metric, MetricDataOnUpdate} from "../core/Metric";
+import {Metric} from "../core/Metric";
 import {Project} from "../core/Project";
 import {MetricForm} from "../forms/createMetricForm";
 import {useModal} from "../services/ModalService";
 import {formatTimestamp} from "../utils/formatTimestamp";
-import {AddSerieValueForm} from "./projectPage/forms/AddSeriesValueForm";
 
 export function MetricHistoryPage() {
 	
 	const api = useApi();
 	const modalService = useModal();
-	const navigate = useNavigate()
 	const {projectId, metricId} = useParams();
-	const [errorMessage, setErrorMessage] = useState<null | string>(null);
 	const [project, setProject] = useState<Project | null>(null);
 	const [metric, setMetric] = useState<Metric | null>(null);
 
