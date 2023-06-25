@@ -3,7 +3,7 @@
 Awary is a simple software that allows you to **store** data in the form of a **log** or **metric**
 using HTTP requests, there is no processing of these data.  
   
-![image](https://github.com/xesnault/awary/assets/22960612/d946ddae-46c1-490b-bc44-14322de703c7)
+![image](https://github.com/xesnault/awary/assets/22960612/99851416-adb8-44ff-9927-1d992c7795ed)
 
 Documentation is available at [docs.awary.app](https://docs.awary.app) and in the /docs directory as
 markdown files.
